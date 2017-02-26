@@ -1,41 +1,28 @@
-#include <sphere.h>
+#include "sphere.h"
+using std::vector;
 
 #define PI 3.14159265358979323846
 
-void esfera(double raio, int slices, int stacks, string file_name) {
+vector<Vertex*> sphere(double radious, int slices, int stacks) {
 
     double camadas = PI / slices;
 	double rotacoes = 2 * PI / stacks;
-	Vertex p = Vertex::Vertex();
-	ofstream file(file_name);
-	vector<Vertex> points;
-
+    vector<Vertex*> points;
 
 	for (int i = 0; i <= slices; i++) {
-		double angYX = camadas * i; // 0 a 180º na vertical
+		double angYX = camadas * i; // 0 to 180º in vertical
 
 		for (int j = 0; j <= stacks; j++) {
 
-			double angZX = rotacoes * j; // 0 a 360º na horizontal
+			double angZX = rotacoes * j; // 0 to 360º in horizontal
 
-			double x1 = raio * sin(angYX) * sin(angZX);
-			double y1 = raio * cos(angYX);
-			double z1 = raio * sin(angYX) * cos(angZX);
+			double x1 = radious * sin(angYX) * sin(angZX);
+			double y1 = radious * cos(angYX);
+			double z1 = radious * sin(angYX) * cos(angZX);
 
-			file << x1 << " " << y1 << " " << z1 << endl;
-
-			p = Vertex(x1 / raio, y1 / raio, z1 / raio);
-			points.push_back(p);
+			points.push_back(new Vertex(x1/radious, y1/radious, z1/radious));
 		}
 	}
 
-	int nn = points.size();
-	file << nn << endl;
-
-	for (int i = 0; i < nn; i++) {
-		Vertex p = points[i];
-		file << p.getX() << "," << p.getY() << "," << p.getZ() << endl;
-	}
-
-	file.close();
+    return points;
 }

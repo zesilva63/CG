@@ -9,10 +9,10 @@
 #include <math.h>
 #include <string>
 
-#include <iostream>
-#include <fstream>
 #include <vector>
 
 #include "vertex.h"
+
+std::vector<Vertex*> sphere(double raio, int slices, int stacks);
 
 #endif
