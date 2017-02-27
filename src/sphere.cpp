@@ -3,18 +3,20 @@ using std::vector;
 
 #define PI 3.14159265358979323846
 
-vector<Vertex*> sphere(double radious, int slices, int stacks) {
 
-    double camadas = PI / slices;
-	double rotacoes = 2 * PI / stacks;
+vector<Vertex*> sphere(double radious, int slicesV, int stacksH, std::string file_name) {
+
+    double distVertical = (2 * PI) / slicesV;
+    double distHorizontal = PI / stacksH;
     vector<Vertex*> points;
 
-	for (int i = 0; i <= slices; i++) {
-		double angYX = camadas * i; // 0 to 180º in vertical
+	for (int i = 0; i <= slicesV; i++) {
 
-		for (int j = 0; j <= stacks; j++) {
+        double angYX = distHorizontal * i; // 0 to 180º in vertical
 
-			double angZX = rotacoes * j; // 0 to 360º in horizontal
+		for (int j = 0; j <= stacksH; j++) {
+
+			double angZX = distVertical * j; // 0 to 360º in horizontal
 
 			double x1 = radious * sin(angYX) * sin(angZX);
 			double y1 = radious * cos(angYX);

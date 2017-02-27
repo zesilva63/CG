@@ -13,6 +13,5 @@
 
 #include "vertex.h"
 
-std::vector<Vertex*> sphere(double raio, int slices, int stacks);
 
 #endif
