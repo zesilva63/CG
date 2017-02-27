@@ -33,3 +33,7 @@
 
 # Vim temp files
 .*.swp
+
+# Project files
+engine/engine
+build
