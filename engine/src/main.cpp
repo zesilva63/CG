@@ -1,13 +1,19 @@
 #include <GL/glut.h>
 #include <iostream>
 #include <vector>
+#include <math.h>
 
+#include <stdio.h>
 #include "scene.h"
 #include "../../src/vertex.h"
 
 using std::vector;
 
 vector<Vertex*> vertices;
+
+float alpha = 0;
+float beta = 0;
+float radius = 5;
 
 void changeSize(int w, int h) {
 
@@ -33,7 +39,6 @@ void changeSize(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-
 void renderscene(void) {
 
     // clear buffers
@@ -41,7 +46,11 @@ void renderscene(void) {
 
     // set the camera
     glLoadIdentity();
-    gluLookAt(5,0,5,
+    float px = radius * cos(beta) * sin(alpha);
+    float py = radius * sin(beta);
+    float pz = radius * cos(beta) * cos(alpha);
+
+    gluLookAt(px, py, pz,
               0.0,0.0,0.0,
               0.0f,1.0f,0.0f);
 
@@ -52,6 +61,25 @@ void renderscene(void) {
 
     // End of frame
     glutSwapBuffers();
+}
+
+void camera_motion(unsigned char key, int x, int y) {
+    switch (key) {
+        case 'a': alpha -= 0.1;
+                  break;
+        case 'd': alpha += 0.1;
+                  break;
+        case 's': radius += 0.1;
+                  break;
+        case 'w': radius -= 0.1;
+                  break;
+        case 'j': beta -= 0.1;
+                  break;
+        case 'k': beta += 0.1;
+                  break;
+    }
+
+    glutPostRedisplay();
 }
 
 int main(int argc, char **argv) {
@@ -76,7 +104,10 @@ int main(int argc, char **argv) {
     glutDisplayFunc(renderscene);
     glutReshapeFunc(changeSize);
 
-    //  OpenGL settings
+    // register keyboard callbacks
+    glutKeyboardFunc(camera_motion);
+
+    // OpenGL settings
     glEnable(GL_DEPTH_TEST);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 

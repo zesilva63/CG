@@ -7,7 +7,7 @@ CXX ?= g++
 SRC_PATH = src
 GENERIC_SRC_PATH = ../src
 # Space-separated pkg-config libraries used by this project
-LIBS = -ltinyxml2 -lm -lGL -lGLU -lglut
+LIBS = -ltinyxml2 -lm -lGL -lGLEW -lGLU -lglut
 # General compiler flags
 COMPILE_FLAGS = -std=c++11 -Wall -Wextra
 # Additional release-specific flags
