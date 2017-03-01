@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "vertex.h"
+#include "../../src/vertex.h"
 
 std::vector<Vertex*> sphere(double raio, int verticalLayers, int horizontalLayers);
 

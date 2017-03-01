@@ -5,7 +5,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "vertex.h"
+#include "../../src/vertex.h"
+
 
 /**
  * Generates a square in the XZ plane, centered in the origin.
