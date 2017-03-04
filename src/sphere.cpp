@@ -1,30 +1,43 @@
 #include "sphere.h"
 using std::vector;
 
-#define PI 3.14159265358979323846
 
+vector<Vertex*> CreateSphere (double radious, int slicesV, int stacksH std::string file_name) {
 
-vector<Vertex*> sphere(double radious, int slicesV, int stacksH, std::string file_name) {
+    double angle = 0;
 
-    double distVertical = (2 * PI) / slicesV;
-    double distHorizontal = PI / stacksH;
+    double a;
+    double b;
+
     vector<Vertex*> points;
 
-	for (int i = 0; i <= slicesV; i++) {
+    for(b = 0; b <= 90 - slicesV; b += slicesV) {
 
-        double angYX = distHorizontal * i; // 0 to 180º in vertical
+        for(a = 0; a <= 360 - slicesV; a += slicesV) {
 
-		for (int j = 0; j <= stacksH; j++) {
+            x1 = radious * sin((a) / 180 * PI) * sin((b) / 180 * PI);
+            y1 = radious * cos((a) / 180 * PI) * sin((b) / 180 * PI);
+            z1 = radious * cos((b) / 180 * PI);
 
-			double angZX = distVertical * j; // 0 to 360º in horizontal
+            x2 = radious * sin((a) / 180 * PI) * sin((b + slicesV) / 180 * PI);
+            y2 = radious * cos((a) / 180 * PI) * sin((b + slicesV) / 180 * PI);
+            z2 = radious * cos((b + slicesV) / 180 * PI);
 
-			double x1 = radious * sin(angYX) * sin(angZX);
-			double y1 = radious * cos(angYX);
-			double z1 = radious * sin(angYX) * cos(angZX);
+            x3 = radious * sin((a + slicesV) / 180 * PI) * sin((b) / 180 * PI);
+            y3 = radious * cos((a + slicesV) / 180 * PI) * sin((b) / 180 * PI);
+            z3 = radious * cos((b) / 180 * PI);
 
-			points.push_back(new Vertex(x1/radious, y1/radious, z1/radious));
-		}
-	}
+            x4 = radious * sin((a + slicesV) / 180 * PI) * sin((b + slicesV) / 180 * PI);
+            y4 = radious * cos((a + slicesV) / 180 * PI) * sin((b + slicesV) / 180 * PI);
+            z4 = radious * cos((b + slicesV) / 180 * PI);
+
+            points.push_back(new Vertex(x1, y1, z1);
+            points.push_back(new Vertex(x2, y2, z2);
+            points.push_back(new Vertex(x3, y3, z3);
+            points.push_back(new Vertex(x4, y4, z4);
+
+        }
+    }
 
     return points;
 }
