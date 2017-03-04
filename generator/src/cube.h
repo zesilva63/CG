@@ -2,7 +2,7 @@
 #define __CUBE_H__
 
 #include <vector>
-#include "vertex.h"
+#include "../../vertex.h"
 
 /**
  * Generates a cube with x length, z width and y height
