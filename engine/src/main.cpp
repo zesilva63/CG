@@ -45,7 +45,7 @@ void renderscene(void) {
               0.0,0.0,0.0,
               0.0f,1.0f,0.0f);
 
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_TRIANGLES);
     for(Vertex *v: vertices)
         glVertex3f(v->getX(), v->getY(), v->getZ());
     glEnd();
@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
 
     //  OpenGL settings
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // enter GLUT's main cycle
     glutMainLoop();
