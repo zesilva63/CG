@@ -37,3 +37,7 @@
 # Project files
 engine/engine
 build
+
+# Project output files
+*.xml
+*.3d
