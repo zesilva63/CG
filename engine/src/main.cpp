@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
     glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
     glutInitWindowPosition(100,100);
     glutInitWindowSize(800,800);
-    glutCreateWindow("CG@DI-UM");
+    glutCreateWindow("Engine");
 
     // required callback registry
     glutDisplayFunc(renderscene);
@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
 
     //  OpenGL settings
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // enter GLUT's main cycle
     glutMainLoop();
