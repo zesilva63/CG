@@ -1,4 +1,4 @@
-#include "vertex.h"
+#include "../../src/vertex.h"
 #include "cube.h"
 #include "plane.h"
 #include <iostream>
@@ -15,7 +15,9 @@ void generate_cube(char* x, char* y, char* z, char* n, char* file_path);
 void write_file(vector<Vertex*> v, char* file_path);
 
 int main (int argc, char** argv) {
-    if (!strcmp(argv[1], "plane") && argc == 4)
+    if (argc == 1)
+        print_usage();
+    else if (!strcmp(argv[1], "plane") && argc == 4)
         generate_plane(argv[2], argv[3]);
     else if (!strcmp(argv[1], "box") && argc == 7)
         generate_cube(argv[2], argv[3], argv[4], argv[5], argv[6]);
@@ -59,6 +61,9 @@ void write_file(vector<Vertex*> shape, char* file_path){
 
 void print_usage() {
     std::cout << "Usage: generate <shape> [options] <file>" << std::endl;
-    // TODO
-    // Show options to various shapes
+    std::cout << "shapes and options:" << std::endl;
+    std::cout << "\tplane <size>" << std::endl;
+    std::cout << "\tbox <x> <y> <z>" << std::endl;
+    std::cout << "\tsphere <radius> <slices> <stacks>" << std::endl;
+    std::cout << "\tcone <radius> <height> <slices> <stacks>" << std::endl;
 }

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "../../vertex.h"
+#include "../../src/vertex.h"
 
 
 /**
