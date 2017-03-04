@@ -13,5 +13,6 @@
 
 #include "vertex.h"
 
+std::vector<Vertex*> sphere(double radious, int camadasV, int camadasH, std::string file_name);
 
 #endif
