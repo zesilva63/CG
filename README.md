@@ -1,1 +1,5 @@
 # CG
+# Dependecies
+
+- tinyxml2
+
