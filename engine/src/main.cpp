@@ -45,7 +45,7 @@ void renderscene(void) {
               0.0,0.0,0.0,
               0.0f,1.0f,0.0f);
 
-    glBegin(GL_TRIANGLES);
+    glBegin(GL_LINE_LOOP);
     for(Vertex *v: vertices)
         glVertex3f(v->getX(), v->getY(), v->getZ());
     glEnd();
@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
     glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
     glutInitWindowPosition(100,100);
     glutInitWindowSize(800,800);
-    glutCreateWindow("CG@DI-UM");
+    glutCreateWindow("Engine");
 
     // required callback registry
     glutDisplayFunc(renderscene);
