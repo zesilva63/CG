@@ -12,35 +12,35 @@ std::vector<Vertex*> sphere(double radius, int verticalLayers, int horizontalLay
 
     std::vector<Vertex*> points;
     int i, j;
-    float teta = 0, fi = 0;
+    float theta = 0, phi = 0;
     float jumpH = PI / horizontalLayers;
     float jumpV = (2 * PI) / verticalLayers;
     float x1, y1, z1, x2, y2, z2, x3, y3, z3;
 
     for (i = 0; i < horizontalLayers; i++) {
-        teta = 0;
+        theta = 0;
 
         for (j = 0; j < verticalLayers; j++) {
 
-            x1 = radius*sin(fi)*sin(teta);
-            y1 = radius*cos(fi);
-            z1 = radius*cos(teta)*sin(fi);
+            x1 = radius*sin(phi)*sin(theta);
+            y1 = radius*cos(phi);
+            z1 = radius*cos(theta)*sin(phi);
 
-            x2 = radius*sin(fi + jumpH)*sin(teta + jumpV);
-            y2 = radius*cos(fi + jumpH);
-            z2 = radius*cos(teta + jumpV)*sin(fi + jumpH);
+            x2 = radius*sin(phi + jumpH)*sin(theta + jumpV);
+            y2 = radius*cos(phi + jumpH);
+            z2 = radius*cos(theta + jumpV)*sin(phi + jumpH);
 
-            x3 = radius*sin(fi + jumpH)*sin(teta);
-            y3 = radius*cos(fi + jumpH);
-            z3 = radius*cos(teta)*sin(fi + jumpH);
+            x3 = radius*sin(phi + jumpH)*sin(theta);
+            y3 = radius*cos(phi + jumpH);
+            z3 = radius*cos(theta)*sin(phi + jumpH);
 
             points.push_back(new Vertex(x1, y1, z1));
             points.push_back(new Vertex(x2, y2, z2));
             points.push_back(new Vertex(x3, y3, z3));
 
-            teta += jumpV;
+            theta += jumpV;
         }
-        fi += jumpH;
+        phi += jumpH;
     }
 
     return points;
