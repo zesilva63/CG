@@ -1,5 +1,8 @@
 #include "sphere.h"
+
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 using std::vector;
 
