@@ -1,6 +1,7 @@
 #include "scene.h"
 #include <fstream>
 #include <iostream>
+#include <exception>
 
 using tinyxml2::XMLDocument;
 using tinyxml2::XMLNode;
@@ -11,12 +12,12 @@ std::vector<Vertex*> scene::get_vertices() {
     return copy;
 }
 
-void scene::parse(const char *filename) {
+void scene::parse(std::string filename) {
     XMLDocument doc;
     XMLNode *node;
     XMLElement *elem;
 
-    doc.LoadFile(filename);
+    doc.LoadFile(filename.c_str());
 
     if ((node = doc.FirstChild()))
         node = node->FirstChild();
@@ -32,10 +33,17 @@ void scene::parse(const char *filename) {
 void scene::parse_model(XMLElement *model) {
     const char* filename = model->Attribute("file");
     std::string line;
-    std::ifstream infile(filename);
+    std::ifstream ifile(filename);
 
-    while(std::getline(infile, line)) {
-        Vertex *v = new Vertex(line);
-        vertices.push_back(v);
+    if (ifile.fail())
+        throw std::ios_base::failure(std::string("Couldn't find file: ") + filename);
+
+    while(std::getline(ifile, line)) {
+        try {
+            Vertex *v = new Vertex(line);
+            vertices.push_back(v);
+        } catch (std::exception& e) {
+            throw std::invalid_argument(std::string("Couldn't parse file ") + filename + ": " + e.what());
+        }
     }
 }

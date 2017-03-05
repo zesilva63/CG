@@ -3,7 +3,7 @@
 #include <vector>
 #include <math.h>
 
-#include <stdio.h>
+#include <exception>
 #include "scene.h"
 #include "../../src/vertex.h"
 
@@ -86,12 +86,17 @@ int main(int argc, char **argv) {
     scene *s = new scene();
 
     if (argc == 1) {
-        std::cout << "Input file required" << std::endl;
+        std::cerr << "Input file required" << std::endl;
         return 1;
     }
 
-    s->parse(argv[1]);
-    vertices = s->get_vertices();
+    try {
+        s->parse(std::string(argv[1]));
+        vertices = s->get_vertices();
+    } catch (std::exception& e) {
+        std::cerr << e.what() << std::endl;
+        return 2;
+    }
 
     // init GLUT and the window
     glutInit(&argc, argv);
