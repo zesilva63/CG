@@ -2,32 +2,33 @@
 
 using std::vector;
 
-std::vector<Vertex*> sphere(double raio, int camadasV, int camadasH) {
+#define PI  3.14159265358979323846
+
+std::vector<Vertex*> sphere(double radius, int verticalLayers, int horizontalLayers) {
 
     std::vector<Vertex*> points;
-
     int i, j;
-    float teta = 0;
-    float fi = 0;
-	float saltoH = M_PI / camadasH;
-	float saltoV = 2 * (M_PI) / camadasV;
-	float x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4;
-	for (i = 0; i < camadasH; i++) {
+    float teta = 0, fi = 0;
+	float saltoH = PI / horizontalLayers;
+	float saltoV = (2 * PI) / verticalLayers;
+	float x1, y1, z1, x2, y2, z2, x3, y3, z3;
+
+    for (i = 0; i < horizontalLayers; i++) {
 		teta = 0;
 
-		for (j = 0; j < camadasV; j++) {
+		for (j = 0; j < verticalLayers; j++) {
 
-			x1 = raio*sin(fi)*sin(teta);
-			y1 = raio*cos(fi);
-			z1 = raio*cos(teta)*sin(fi);
+			x1 = radius*sin(fi)*sin(teta);
+			y1 = radius*cos(fi);
+			z1 = radius*cos(teta)*sin(fi);
 
-			x2 = raio*sin(fi + saltoH)*sin(teta + saltoV);
-			y2 = raio*cos(fi + saltoH);
-			z2 = raio*cos(teta + saltoV)*sin(fi + saltoH);
+			x2 = radius*sin(fi + saltoH)*sin(teta + saltoV);
+			y2 = radius*cos(fi + saltoH);
+			z2 = radius*cos(teta + saltoV)*sin(fi + saltoH);
 
-			x3 = raio*sin(fi + saltoH)*sin(teta);
-			y3 = raio*cos(fi + saltoH);
-			z3 = raio*cos(teta)*sin(fi + saltoH);
+			x3 = radius*sin(fi + saltoH)*sin(teta);
+			y3 = radius*cos(fi + saltoH);
+			z3 = radius*cos(teta)*sin(fi + saltoH);
 
             points.push_back(new Vertex(x1, y1, z1));
             points.push_back(new Vertex(x2, y2, z2));
@@ -43,11 +44,10 @@ std::vector<Vertex*> sphere(double raio, int camadasV, int camadasH) {
 	}
     return points;
 }
-/*
+
 int main () {
 
     vector<Vertex*> v;
-    v = sphere(1,20,20);
+    v = sphere(1,20,15);
     return 0;
 }
-*/
