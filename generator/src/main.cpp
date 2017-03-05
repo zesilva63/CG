@@ -63,7 +63,7 @@ void print_usage() {
     std::cout << "Usage: generate <shape> [options] <file>" << std::endl;
     std::cout << "shapes and options:" << std::endl;
     std::cout << "\tplane <size>" << std::endl;
-    std::cout << "\tbox <x> <y> <z>" << std::endl;
+    std::cout << "\tbox <x> <y> <z> <divisions>" << std::endl;
     std::cout << "\tsphere <radius> <slices> <stacks>" << std::endl;
     std::cout << "\tcone <radius> <height> <slices> <stacks>" << std::endl;
 }
