@@ -41,7 +41,7 @@ std::vector<Vertex*> sphere(double radius, int verticalLayers, int horizontalLay
             teta += jumpV;
         }
         fi += jumpH;
-	}
+    }
 
     return points;
 }
