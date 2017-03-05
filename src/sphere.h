@@ -12,5 +12,4 @@
 
 std::vector<Vertex*> sphere(double raio, int camadasV, int camadasH);
 
-
 #endif

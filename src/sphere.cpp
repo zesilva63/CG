@@ -2,8 +2,6 @@
 
 using std::vector;
 
-
-
 std::vector<Vertex*> sphere(double raio, int camadasV, int camadasH) {
 
     std::vector<Vertex*> points;
@@ -14,10 +12,10 @@ std::vector<Vertex*> sphere(double raio, int camadasV, int camadasH) {
 	int i, j;
 	float x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4;
 
-	for (i = 0; i < camadasH; i++){
+	for (i = 0; i < camadasH; i++) {
 		teta = 0;
 
-		for (j = 0; j < camadasV; j++){
+		for (j = 0; j < camadasV; j++) {
 			x1 = raio*sin(fi)*sin(teta);
 			y1 = raio*cos(fi);
 			z1 = raio*sin(fi)*cos(teta);
@@ -49,10 +47,11 @@ std::vector<Vertex*> sphere(double raio, int camadasV, int camadasH) {
 	}
     return points;
 }
-
+/*
 int main () {
 
     vector<Vertex*> v;
-    v = sphere(2,10,10);
+    v = sphere(1,20,20);
     return 0;
 }
+*/
