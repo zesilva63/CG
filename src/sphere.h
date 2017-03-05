@@ -10,6 +10,7 @@
 
 #include "vertex.h"
 
-std::vector<Vertex*> sphere(double radious, int slicesV, int stacksH, std::string file_name);
+std::vector<Vertex*> sphere(double raio, int camadasV, int camadasH);
+
 
 #endif

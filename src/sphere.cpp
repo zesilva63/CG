@@ -3,38 +3,56 @@
 using std::vector;
 
 
-vector<Vertex*> sphere(double radious, int slicesV, int stacksH, std::string file_name) {
 
-    const double PI = 3.14159265358979323846;
+std::vector<Vertex*> sphere(double raio, int camadasV, int camadasH) {
 
-    double distVertical = (2 * PI) / slicesV;
-    double distHorizontal = PI / stacksH;
+    std::vector<Vertex*> points;
 
-    vector<Vertex*> points;
+    float teta = 0; float fi = 0;
+	float saltoH = M_PI / camadasH;
+	float saltoV = 2 * (M_PI) / camadasV;
+	int i, j;
+	float x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4;
 
-	for (int i = 0; i <= slicesV; i++) {
+	for (i = 0; i < camadasH; i++){
+		teta = 0;
 
-        double angYX = distHorizontal * i;
+		for (j = 0; j < camadasV; j++){
+			x1 = raio*sin(fi)*sin(teta);
+			y1 = raio*cos(fi);
+			z1 = raio*sin(fi)*cos(teta);
 
-		for (int j = 0; j <= stacksH; j++) {
+			x2 = raio*sin(fi + saltoH)*sin(teta + saltoV);
+			y2 = raio*cos(fi + saltoH);
+			z2 = raio*sin(fi + saltoH)*cos(teta + saltoV);
 
-			double angZX = distVertical * j;
+			x3 = raio*sin(fi + saltoH)*sin(teta);
+			y3 = raio*cos(fi + saltoH);
+			z3 = raio*sin(fi + saltoH)* cos(teta);
 
-			double x1 = radious * sin(angYX) * sin(angZX);
-			double y1 = radious * cos(angYX);
-			double z1 = radious * sin(angYX) * cos(angZX);
-            printf("%f %f %f\n",x1/radious,y1/radious,z1/radious);
-			points.push_back(new Vertex(x1/radious, y1/radious, z1/radious));
+			x4 = raio*sin(fi)*sin(teta + saltoV);
+			y4 = raio*cos(fi);
+			z4 = raio*sin(fi)*cos(teta + saltoV);
+
+
+			printf("%f %f %f\n", x1, y1, z1);
+			printf("%f %f %f\n", x2, y2, z2);
+			printf("%f %f %f\n", x3, y3, z3);
+
+			printf("%f %f %f\n", x1, y1, z1);
+			printf("%f %f %f\n", x4, y4, z4);
+			printf("%f %f %f\n", x2, y2, z2);
+
+			teta += saltoV;
 		}
+		fi += saltoH;
 	}
-
     return points;
 }
-/*
+
 int main () {
 
     vector<Vertex*> v;
-    v = sphere(2,10,10,"sphere.3d");
+    v = sphere(2,10,10);
     return 0;
 }
-*/
