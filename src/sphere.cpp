@@ -2,44 +2,39 @@
 
 using std::vector;
 
-std::vector<Vertex*> sphere(double radious, int camadasV, int camadasH, std::string file_name) {
+
+vector<Vertex*> sphere(double radious, int slicesV, int stacksH, std::string file_name) {
 
     const double PI = 3.14159265358979323846;
 
-    double a;
-    double b;
-    float x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4;
-    float saltoH = 90 / camadasH;
-    float saltoV = 360 / camadasV;
-    std::vector<Vertex*> points;
+    double distVertical = (2 * PI) / slicesV;
+    double distHorizontal = PI / stacksH;
 
-    for(b = 0; b <= 90 - saltoH; b += saltoH) {
+    vector<Vertex*> points;
 
-        for(a = 0; a <= 360 - saltoV; a += saltoV) {
+	for (int i = 0; i <= slicesV; i++) {
 
-            x1 = radious * sin((a) / 180 * PI) * sin((b) / 180 * PI);
-            y1 = radious * cos((a) / 180 * PI) * sin((b) / 180 * PI);
-            z1 = radious * cos((b) / 180 * PI);
+        double angYX = distHorizontal * i;
 
-            x2 = radious * sin((a) / 180 * PI) * sin((b + camadasV) / 180 * PI);
-            y2 = radious * cos((a) / 180 * PI) * sin((b + camadasV) / 180 * PI);
-            z2 = radious * cos((b + camadasH) / 180 * PI);
+		for (int j = 0; j <= stacksH; j++) {
 
-            x3 = radious * sin((a + camadasH) / 180 * PI) * sin((b) / 180 * PI);
-            y3 = radious * cos((a + camadasH) / 180 * PI) * sin((b) / 180 * PI);
-            z3 = radious * cos((b) / 180 * PI);
+			double angZX = distVertical * j;
 
-            x4 = radious * sin((a + camadasH) / 180 * PI) * sin((b + camadasV) / 180 * PI);
-            y4 = radious * cos((a + camadasH) / 180 * PI) * sin((b + camadasV) / 180 * PI);
-            z4 = radious * cos((b + camadasH) / 180 * PI);
-
-            points.push_back(new Vertex(x1, y1, z1));
-            points.push_back(new Vertex(x2, y2, z2));
-            points.push_back(new Vertex(x3, y3, z3));
-            points.push_back(new Vertex(x4, y4, z4));
-
-        }
-    }
+			double x1 = radious * sin(angYX) * sin(angZX);
+			double y1 = radious * cos(angYX);
+			double z1 = radious * sin(angYX) * cos(angZX);
+            printf("%f %f %f\n",x1/radious,y1/radious,z1/radious);
+			points.push_back(new Vertex(x1/radious, y1/radious, z1/radious));
+		}
+	}
 
     return points;
 }
+/*
+int main () {
+
+    vector<Vertex*> v;
+    v = sphere(2,10,10,"sphere.3d");
+    return 0;
+}
+*/

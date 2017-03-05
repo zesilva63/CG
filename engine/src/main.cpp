@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "scene.h"
 #include "../../src/vertex.h"
+#include "../../src/sphere.h"
 
 using std::vector;
 
