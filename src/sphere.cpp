@@ -1,4 +1,5 @@
 #include "sphere.h"
+#include <math.h>
 
 using std::vector;
 
@@ -34,20 +35,13 @@ std::vector<Vertex*> sphere(double radius, int verticalLayers, int horizontalLay
             points.push_back(new Vertex(x2, y2, z2));
             points.push_back(new Vertex(x3, y3, z3));
 
-			printf("%f %f %f\n", x1, y1, z1);
-			printf("%f %f %f\n", x2, y2, z2);
-			printf("%f %f %f\n", x3, y3, z3);
+            printf("%f %f %f\n", x1, y1, z1);
+            printf("%f %f %f\n", x2, y2, z2);
+            printf("%f %f %f\n", x3, y3, z3);
 
             teta += saltoV;
 		}
 		fi += saltoH;
 	}
     return points;
-}
-
-int main () {
-
-    vector<Vertex*> v;
-    v = sphere(1,20,15);
-    return 0;
 }
