@@ -1,6 +1,7 @@
-#include "../../src/vertex.h"
-#include "cube.h"
-#include "plane.h"
+#include "../src/vertex.h"
+#include "src/cube.h"
+#include "src/plane.h"
+#include "src/cone.h"
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -12,6 +13,7 @@ using std::ofstream;
 void print_usage();
 void generate_plane(char* size, char* file_path);
 void generate_cube(char* x, char* y, char* z, char* n, char* file_path);
+void generate_cone(char* radious, char* height, char* stacks, char* slices, char* file_path);
 void write_file(vector<Vertex*> v, char* file_path);
 
 int main (int argc, char** argv) {
@@ -21,6 +23,8 @@ int main (int argc, char** argv) {
         generate_plane(argv[2], argv[3]);
     else if (!strcmp(argv[1], "box") && argc == 7)
         generate_cube(argv[2], argv[3], argv[4], argv[5], argv[6]);
+    else if(!strcmp(argv[1], "cone") && argc == 7)
+        generate_cone(argv[2], argv[3], argv[4], argv[5], argv[6]);
     else print_usage();
 
     return 0;
@@ -44,6 +48,19 @@ void generate_cube(char* x, char* y, char* z, char* n, char* file_path){
     i_n = atoi(n);
 
     vector<Vertex*> shape = cube(f_x, f_y, f_z, i_n);
+    write_file(shape, file_path);
+}
+
+void generate_cone(char* radious, char* height, char* stacks, char* slices, char* file_path){
+    float r,h;
+    int st,sl;
+
+    r = atof(radious);
+    h = atof(height);
+    st = atoi(stacks);
+    sl = atoi(slices);
+
+    vector<Vertex*> shape = cone(r,h,st,sl);
     write_file(shape, file_path);
 }
 

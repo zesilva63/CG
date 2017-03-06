@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "vertex.h"
+#include "../../src/vertex.h"
 
 /*
 Generates a cone with a given base radius, height, slices and stacks by the user 

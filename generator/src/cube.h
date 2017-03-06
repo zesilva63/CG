@@ -4,6 +4,7 @@
 #include <vector>
 #include "../../src/vertex.h"
 
+
 /**
  * Generates a cube with x length, z width and y height
  * divided in n parts centered in the origin.
