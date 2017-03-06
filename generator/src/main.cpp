@@ -1,4 +1,4 @@
-#include "../src/vertex.h"
+#include "../../src/vertex.h"
 #include "src/cube.h"
 #include "src/plane.h"
 #include "src/cone.h"
