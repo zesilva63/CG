@@ -8,7 +8,7 @@
 class scene {
     public:
         std::vector<Vertex*> get_vertices();
-        void parse(const char *filename);
+        void parse(std::string filename);
 
     private:
         std::vector<Vertex*> vertices;
