@@ -2,6 +2,7 @@
 #include "src/cube.h"
 #include "src/plane.h"
 #include "src/cone.h"
+#include "src/sphere.h"
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -14,6 +15,7 @@ void print_usage();
 void generate_plane(char* size, char* file_path);
 void generate_cube(char* x, char* y, char* z, char* n, char* file_path);
 void generate_cone(char* radious, char* height, char* stacks, char* slices, char* file_path);
+void generate_sphere(char* radious, char* verticalLayers, char* horizontalLayers, char* file_path);
 void write_file(vector<Vertex*> v, char* file_path);
 
 int main (int argc, char** argv) {
@@ -25,6 +27,8 @@ int main (int argc, char** argv) {
         generate_cube(argv[2], argv[3], argv[4], argv[5], argv[6]);
     else if(!strcmp(argv[1], "cone") && argc == 7)
         generate_cone(argv[2], argv[3], argv[4], argv[5], argv[6]);
+    else if(!strcmp(argv[1], "sphere") && argc == 6)
+        generate_sphere(argv[2], argv[3], argv[4], argv[5]);
     else print_usage();
 
     return 0;
@@ -63,6 +67,20 @@ void generate_cone(char* radious, char* height, char* stacks, char* slices, char
     vector<Vertex*> shape = cone(r,h,st,sl);
     write_file(shape, file_path);
 }
+
+
+void generate_sphere(char* radious, char* verticalLayers, char* horizontalLayers, char* file_path){
+    float r;
+    int vL,hL;
+
+    r = atof(radious);
+    vL = atoi(verticalLayers);
+    hL = atoi(horizontalLayers);
+
+    vector<Vertex*> shape = sphere(r,vL,hL);
+    write_file(shape, file_path);
+}
+
 
 void write_file(vector<Vertex*> shape, char* file_path){
     ofstream file;
