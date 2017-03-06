@@ -1,8 +1,8 @@
 #include "../../src/vertex.h"
-#include "src/cube.h"
-#include "src/plane.h"
-#include "src/cone.h"
-#include "src/sphere.h"
+#include "cube.h"
+#include "plane.h"
+#include "cone.h"
+#include "sphere.h"
 #include <iostream>
 #include <fstream>
 #include <cstring>
