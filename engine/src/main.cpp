@@ -9,7 +9,7 @@
 
 using std::vector;
 
-vector<Vertex*> vertices;
+Scene s;
 
 float alpha = 0;
 float beta = 0;
@@ -54,10 +54,7 @@ void renderscene(void) {
               0.0,0.0,0.0,
               0.0f,1.0f,0.0f);
 
-    glBegin(GL_TRIANGLES);
-    for(Vertex *v: vertices)
-        glVertex3f(v->getX(), v->getY(), v->getZ());
-    glEnd();
+    s.render();
 
     // End of frame
     glutSwapBuffers();
@@ -83,7 +80,6 @@ void camera_motion(unsigned char key, int x, int y) {
 }
 
 int main(int argc, char **argv) {
-    scene *s = new scene();
 
     if (argc == 1) {
         std::cerr << "Input file required" << std::endl;
@@ -91,8 +87,7 @@ int main(int argc, char **argv) {
     }
 
     try {
-        s->parse(std::string(argv[1]));
-        vertices = s->get_vertices();
+        s.parse(std::string(argv[1]));
     } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
         return 2;

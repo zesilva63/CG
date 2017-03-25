@@ -51,19 +51,19 @@ END_TIME = read st < $(TIME_FILE) ; \
 	st=$$((`date '+%s'` - $$st - 86400)) ; \
 	echo `date -u -d @$$st '+%H:%M:%S'`
 
-# Debug build for gdb debugging
-.PHONY: debug
-debug: dirs
-	@echo "Beginning debug build"
+# Standard, non-optimized release build
+.PHONY: release
+release: dirs
+	@echo "Beginning release build"
 	@$(START_TIME)
 	@$(MAKE) all --no-print-directory
 	@echo -n "Total build time: "
 	@$(END_TIME)
 
-# Standard, non-optimized release build
-.PHONY: release
-release: dirs
-	@echo "Beginning release build"
+# Debug build for gdb debugging
+.PHONY: debug
+debug: dirs
+	@echo "Beginning debug build"
 	@$(START_TIME)
 	@$(MAKE) all --no-print-directory
 	@echo -n "Total build time: "
