@@ -20,8 +20,11 @@ class Group {
         void add_operation(Operation *op);
         void add_model(Model *m);
         void add_child(Group *grp);
+<<<<<<< HEAD
         bool has_models();
         bool has_operation(const char* type);
+=======
+>>>>>>> 97eb00b... Implements ship, colors and camera
 
     private:
         std::vector<Operation*> ops;

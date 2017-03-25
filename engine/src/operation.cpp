@@ -22,6 +22,12 @@ Scaling::Scaling() {
     z = 1;
 }
 
+Coloring::Coloring() {
+    r = 0;
+    g = 0;
+    b = 0;
+}
+
 void Translation::parse(XMLElement *tr) {
     tr->QueryDoubleAttribute("X", &x);
     tr->QueryDoubleAttribute("Y", &y);
@@ -39,6 +45,12 @@ void Scaling::parse(XMLElement *sc) {
     sc->QueryDoubleAttribute("X", &x);
     sc->QueryDoubleAttribute("Y", &y);
     sc->QueryDoubleAttribute("Z", &z);
+}
+
+void Coloring::parse(XMLElement *cl) {
+    cl->QueryDoubleAttribute("R", &r);
+    cl->QueryDoubleAttribute("G", &g);
+    cl->QueryDoubleAttribute("B", &b);
 }
 
 void Translation::apply() {
@@ -63,4 +75,7 @@ const char* Rotation::type() {
 
 const char* Scaling::type() {
     return "scaling";
+}
+void Coloring::apply() {
+    glColor3f(r/255.0f, g/255.0f, b/255.0f);
 }

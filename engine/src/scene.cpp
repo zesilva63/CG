@@ -41,6 +41,8 @@ Group* Scene::parse_group(XMLNode *group_node) {
             parse_models(grp, node);
         else if (!strcmp(node->Value(), "scale"))
             parse_scale(grp, node);
+        else if (!strcmp(node->Value(), "color"))
+            parse_color(grp, node);
         else if (!strcmp(node->Value(), "group")) {
             Group *child = parse_group(node);
             grp->add_child(child);
@@ -52,9 +54,6 @@ Group* Scene::parse_group(XMLNode *group_node) {
 
 void Scene::parse_models(Group* grp, XMLNode *nd) {
     XMLNode *model = nd->FirstChild();
-
-    if (grp->has_models())
-        throw std::domain_error("A group can only have a single tag models");
 
     for(; model; model = model->NextSibling()) {
         XMLElement *elem = model->ToElement();
@@ -74,37 +73,29 @@ void Scene::parse_model(Group* grp, XMLNode *nd) {
 }
 
 void Scene::parse_translate(Group* grp, XMLNode *nd) {
-    if (grp->has_models())
-        throw std::domain_error("Geometric transformations should be specified before models");
-
-    if (grp->has_operation("translation"))
-        throw std::domain_error("There must be only a geometric transformation of the same type inside a group");
-
     Translation *tr = new Translation();
+
     tr->parse(nd->ToElement());
     grp->add_operation(tr);
 }
 
 void Scene::parse_rotate(Group* grp, XMLNode *nd) {
-    if (grp->has_models())
-        throw std::domain_error("Geometric transformations should be specified before models");
-
-    if (grp->has_operation("rotation"))
-        throw std::domain_error("There must be only a geometric transformation of the same type inside a group");
-
     Rotation *rt = new Rotation();
+
     rt->parse(nd->ToElement());
     grp->add_operation(rt);
 }
 
 void Scene::parse_scale(Group* grp, XMLNode *nd) {
-    if (grp->has_models())
-        throw std::domain_error("Geometric transformations should be specified before models");
-
-    if (grp->has_operation("scaling"))
-        throw std::domain_error("There must be only a geometric transformation of the same type inside a group");
-
     Scaling *sc = new Scaling();
+
+    sc->parse(nd->ToElement());
+    grp->add_operation(sc);
+}
+
+void Scene::parse_color(Group* grp, XMLNode *nd) {
+    Coloring *sc = new Coloring();
+
     sc->parse(nd->ToElement());
     grp->add_operation(sc);
 }

@@ -5,15 +5,15 @@
 
 #include <exception>
 #include "scene.h"
+#include "camera.h"
+#include "ship.h"
 #include "../../src/vertex.h"
 
 using std::vector;
 
 Scene s;
-
-float alpha = 0;
-float beta = 0;
-float radius = 5;
+Camera c;
+Ship ship;
 
 void changeSize(int w, int h) {
 
@@ -40,19 +40,23 @@ void changeSize(int w, int h) {
 }
 
 void renderscene(void) {
-
     // clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    
     // set the camera
     glLoadIdentity();
-    float px = radius * cos(beta) * sin(alpha);
-    float py = radius * sin(beta);
-    float pz = radius * cos(beta) * cos(alpha);
+    glTranslatef(0.0f, -0.6f, -3);
+    
+    
+    ship.defineShip();
 
-    gluLookAt(px, py, pz,
-              0.0,0.0,0.0,
-              0.0f,1.0f,0.0f);
+    glRotatef(180,1.0,0.0,0.0);
+    glTranslatef(0.0f, 00.f, 30);
+    
+    glRotatef(c.getXRot(),1.0,0.0,0.0);
+    glRotatef(c.getYRot(),0.0,1.0,0.0);
+    glTranslated(-c.getXPos(),-c.getYPos(),-c.getZPos());
+    
 
     s.render();
 
@@ -60,24 +64,13 @@ void renderscene(void) {
     glutSwapBuffers();
 }
 
-void camera_motion(unsigned char key, int x, int y) {
-    switch (key) {
-        case 'a': alpha -= 0.1;
-                  break;
-        case 'd': alpha += 0.1;
-                  break;
-        case 's': radius += 0.1;
-                  break;
-        case 'w': radius -= 0.1;
-                  break;
-        case 'j': beta -= 0.1;
-                  break;
-        case 'k': beta += 0.1;
-                  break;
-    }
 
-    glutPostRedisplay();
+void keyboard(unsigned char key, int x, int y){
+    c.camera_motion(key,x,y);
 }
+
+
+
 
 int main(int argc, char **argv) {
 
@@ -102,10 +95,11 @@ int main(int argc, char **argv) {
 
     // required callback registry
     glutDisplayFunc(renderscene);
+    glutIdleFunc (renderscene); 
     glutReshapeFunc(changeSize);
 
     // register keyboard callbacks
-    glutKeyboardFunc(camera_motion);
+    glutKeyboardFunc(keyboard);
 
     // OpenGL settings
     glEnable(GL_DEPTH_TEST);
