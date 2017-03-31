@@ -65,6 +65,10 @@ void Scaling::apply() {
     glScalef(x, y, z);
 }
 
+void Coloring::apply() {
+    glColor3f(r/255.0f, g/255.0f, b/255.0f);
+}
+
 const char* Translation::type() {
     return "translation";
 }
@@ -76,6 +80,7 @@ const char* Rotation::type() {
 const char* Scaling::type() {
     return "scaling";
 }
-void Coloring::apply() {
-    glColor3f(r/255.0f, g/255.0f, b/255.0f);
+
+const char* Coloring::type() {
+    return "coloring";
 }

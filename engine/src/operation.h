@@ -52,6 +52,7 @@ class Coloring : public Operation{
         Coloring();
         void parse(tinyxml2::XMLElement *sc);
         void apply();
+        const char* type();
     private:
         double r;
         double g;

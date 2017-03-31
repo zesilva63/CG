@@ -94,8 +94,8 @@ void Scene::parse_scale(Group* grp, XMLNode *nd) {
 }
 
 void Scene::parse_color(Group* grp, XMLNode *nd) {
-    Coloring *sc = new Coloring();
+    Coloring *cl = new Coloring();
 
-    sc->parse(nd->ToElement());
-    grp->add_operation(sc);
+    cl->parse(nd->ToElement());
+    grp->add_operation(cl);
 }
