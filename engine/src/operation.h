@@ -47,16 +47,4 @@ class Scaling : public Operation {
         double z;
 };
 
-class Coloring : public Operation{
-    public:
-        Coloring();
-        void parse(tinyxml2::XMLElement *sc);
-        void apply();
-        const char* type();
-    private:
-        double r;
-        double g;
-        double b;
-};
-
 #endif

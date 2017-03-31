@@ -2,16 +2,19 @@
 #define __MODEL__
 
 #include <vector>
+#include <tinyxml2.h>
 #include "operation.h"
 #include "../../src/vertex.h"
 
 class Model {
     public:
-        void parse(const char* filename);
+        void parse(tinyxml2::XMLElement *model);
         void render();
 
     private:
         std::vector<Vertex*> vertices;
+        double red, green, blue;
+        void setColor(tinyxml2::XMLElement *model);
 };
 
 class Group {

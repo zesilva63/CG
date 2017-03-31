@@ -41,8 +41,6 @@ Group* Scene::parse_group(XMLNode *group_node) {
             parse_models(grp, node);
         else if (!strcmp(node->Value(), "scale"))
             parse_scale(grp, node);
-        else if (!strcmp(node->Value(), "color"))
-            parse_color(grp, node);
         else if (!strcmp(node->Value(), "group")) {
             Group *child = parse_group(node);
             grp->add_child(child);
@@ -64,11 +62,9 @@ void Scene::parse_models(Group* grp, XMLNode *nd) {
 }
 
 void Scene::parse_model(Group* grp, XMLNode *nd) {
-    XMLElement *elm = nd->ToElement();
-    const char* filename = elm->Attribute("file");
     Model *model = new Model();
 
-    model->parse(filename);
+    model->parse(nd->ToElement());
     grp->add_model(model);
 }
 
@@ -91,11 +87,4 @@ void Scene::parse_scale(Group* grp, XMLNode *nd) {
 
     sc->parse(nd->ToElement());
     grp->add_operation(sc);
-}
-
-void Scene::parse_color(Group* grp, XMLNode *nd) {
-    Coloring *cl = new Coloring();
-
-    cl->parse(nd->ToElement());
-    grp->add_operation(cl);
 }

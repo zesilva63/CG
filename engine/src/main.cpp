@@ -42,21 +42,19 @@ void changeSize(int w, int h) {
 void renderscene(void) {
     // clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
+
     // set the camera
     glLoadIdentity();
     glTranslatef(0.0f, -0.6f, -3);
-    
-    
+
     ship.defineShip();
 
     glRotatef(180,1.0,0.0,0.0);
     glTranslatef(0.0f, 00.f, 30);
-    
+
     glRotatef(c.getXRot(),1.0,0.0,0.0);
     glRotatef(c.getYRot(),0.0,1.0,0.0);
     glTranslated(-c.getXPos(),-c.getYPos(),-c.getZPos());
-    
 
     s.render();
 
@@ -68,9 +66,6 @@ void renderscene(void) {
 void keyboard(unsigned char key, int x, int y){
     c.camera_motion(key,x,y);
 }
-
-
-
 
 int main(int argc, char **argv) {
 
@@ -95,7 +90,7 @@ int main(int argc, char **argv) {
 
     // required callback registry
     glutDisplayFunc(renderscene);
-    glutIdleFunc (renderscene); 
+    glutIdleFunc (renderscene);
     glutReshapeFunc(changeSize);
 
     // register keyboard callbacks
