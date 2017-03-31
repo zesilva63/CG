@@ -59,3 +59,15 @@ void Group::add_model(Model *m) {
 void Group::add_child(Group *grp) {
     children.push_back(grp);
 }
+
+bool Group::has_models() {
+    return !models.empty();
+}
+
+bool Group::has_operation(const char* type) {
+    for(Operation *op: ops)
+        if (!strcmp(op->type(), type))
+            return true;
+
+    return false;
+}

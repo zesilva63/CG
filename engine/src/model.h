@@ -20,6 +20,8 @@ class Group {
         void add_operation(Operation *op);
         void add_model(Model *m);
         void add_child(Group *grp);
+        bool has_models();
+        bool has_operation(const char* type);
 
     private:
         std::vector<Operation*> ops;

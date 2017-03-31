@@ -7,6 +7,7 @@ class Operation {
     public:
         virtual void parse(tinyxml2::XMLElement *op) = 0;
         virtual void apply() = 0;
+        virtual const char* type() = 0;
 };
 
 class Translation : public Operation {
@@ -14,6 +15,7 @@ class Translation : public Operation {
         Translation();
         void parse(tinyxml2::XMLElement *tr);
         void apply();
+        const char* type();
     private:
         double x;
         double y;
@@ -25,6 +27,7 @@ class Rotation : public Operation {
         Rotation();
         void parse(tinyxml2::XMLElement *rt);
         void apply();
+        const char* type();
     private:
         double angle;
         double axisX;
@@ -37,6 +40,7 @@ class Scaling : public Operation {
         Scaling();
         void parse(tinyxml2::XMLElement *sc);
         void apply();
+        const char* type();
     private:
         double x;
         double y;

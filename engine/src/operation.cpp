@@ -52,3 +52,15 @@ void Rotation::apply() {
 void Scaling::apply() {
     glScalef(x, y, z);
 }
+
+const char* Translation::type() {
+    return "translation";
+}
+
+const char* Rotation::type() {
+    return "rotation";
+}
+
+const char* Scaling::type() {
+    return "scaling";
+}

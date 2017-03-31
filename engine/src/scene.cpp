@@ -8,6 +8,13 @@ using tinyxml2::XMLElement;
 
 using std::vector;
 
+Group* parse_group(XMLNode *nd);
+void parse_model(Group* grp, XMLNode *nd);
+void parse_scale(Group* grp, XMLNode *nd);
+void parse_models(Group* grp, XMLNode *nd);
+void parse_rotate(Group* grp, XMLNode *nd);
+void parse_translate(Group* grp, XMLNode *nd);
+
 void Scene::render() {
     for(Group *grp: groups)
         grp->render();
@@ -28,7 +35,7 @@ void Scene::parse(std::string filename) {
     }
 }
 
-Group* Scene::parse_group(XMLNode *group_node) {
+Group* parse_group(XMLNode *group_node) {
     Group *grp = new Group();
     XMLNode *node = group_node->FirstChild();
 
@@ -50,8 +57,11 @@ Group* Scene::parse_group(XMLNode *group_node) {
     return grp;
 }
 
-void Scene::parse_models(Group* grp, XMLNode *nd) {
+void parse_models(Group* grp, XMLNode *nd) {
     XMLNode *model = nd->FirstChild();
+
+    if (grp->has_models())
+        throw std::domain_error("A group can only have a single tag models");
 
     for(; model; model = model->NextSibling()) {
         XMLElement *elem = model->ToElement();
@@ -61,7 +71,7 @@ void Scene::parse_models(Group* grp, XMLNode *nd) {
     }
 }
 
-void Scene::parse_model(Group* grp, XMLNode *nd) {
+void parse_model(Group* grp, XMLNode *nd) {
     XMLElement *elm = nd->ToElement();
     const char* filename = elm->Attribute("file");
     Model *model = new Model();
@@ -70,23 +80,38 @@ void Scene::parse_model(Group* grp, XMLNode *nd) {
     grp->add_model(model);
 }
 
-void Scene::parse_translate(Group* grp, XMLNode *nd) {
-    Translation *tr = new Translation();
+void parse_translate(Group* grp, XMLNode *nd) {
+    if (grp->has_models())
+        throw std::domain_error("Geometric transformations should be specified before models");
 
+    if (grp->has_operation("translation"))
+        throw std::domain_error("There must be only a geometric transformation of the same type inside a group");
+
+    Translation *tr = new Translation();
     tr->parse(nd->ToElement());
     grp->add_operation(tr);
 }
 
-void Scene::parse_rotate(Group* grp, XMLNode *nd) {
-    Rotation *rt = new Rotation();
+void parse_rotate(Group* grp, XMLNode *nd) {
+    if (grp->has_models())
+        throw std::domain_error("Geometric transformations should be specified before models");
 
+    if (grp->has_operation("rotation"))
+        throw std::domain_error("There must be only a geometric transformation of the same type inside a group");
+
+    Rotation *rt = new Rotation();
     rt->parse(nd->ToElement());
     grp->add_operation(rt);
 }
 
-void Scene::parse_scale(Group* grp, XMLNode *nd) {
-    Scaling *sc = new Scaling();
+void parse_scale(Group* grp, XMLNode *nd) {
+    if (grp->has_models())
+        throw std::domain_error("Geometric transformations should be specified before models");
 
+    if (grp->has_operation("scaling"))
+        throw std::domain_error("There must be only a geometric transformation of the same type inside a group");
+
+    Scaling *sc = new Scaling();
     sc->parse(nd->ToElement());
     grp->add_operation(sc);
 }
