@@ -8,13 +8,6 @@ using tinyxml2::XMLElement;
 
 using std::vector;
 
-Group* parse_group(XMLNode *nd);
-void parse_model(Group* grp, XMLNode *nd);
-void parse_scale(Group* grp, XMLNode *nd);
-void parse_models(Group* grp, XMLNode *nd);
-void parse_rotate(Group* grp, XMLNode *nd);
-void parse_translate(Group* grp, XMLNode *nd);
-
 void Scene::render() {
     for(Group *grp: groups)
         grp->render();
@@ -35,7 +28,7 @@ void Scene::parse(std::string filename) {
     }
 }
 
-Group* parse_group(XMLNode *group_node) {
+Group* Scene::parse_group(XMLNode *group_node) {
     Group *grp = new Group();
     XMLNode *node = group_node->FirstChild();
 
@@ -57,7 +50,7 @@ Group* parse_group(XMLNode *group_node) {
     return grp;
 }
 
-void parse_models(Group* grp, XMLNode *nd) {
+void Scene::parse_models(Group* grp, XMLNode *nd) {
     XMLNode *model = nd->FirstChild();
 
     if (grp->has_models())
@@ -71,7 +64,7 @@ void parse_models(Group* grp, XMLNode *nd) {
     }
 }
 
-void parse_model(Group* grp, XMLNode *nd) {
+void Scene::parse_model(Group* grp, XMLNode *nd) {
     XMLElement *elm = nd->ToElement();
     const char* filename = elm->Attribute("file");
     Model *model = new Model();
@@ -80,7 +73,7 @@ void parse_model(Group* grp, XMLNode *nd) {
     grp->add_model(model);
 }
 
-void parse_translate(Group* grp, XMLNode *nd) {
+void Scene::parse_translate(Group* grp, XMLNode *nd) {
     if (grp->has_models())
         throw std::domain_error("Geometric transformations should be specified before models");
 
@@ -92,7 +85,7 @@ void parse_translate(Group* grp, XMLNode *nd) {
     grp->add_operation(tr);
 }
 
-void parse_rotate(Group* grp, XMLNode *nd) {
+void Scene::parse_rotate(Group* grp, XMLNode *nd) {
     if (grp->has_models())
         throw std::domain_error("Geometric transformations should be specified before models");
 
@@ -104,7 +97,7 @@ void parse_rotate(Group* grp, XMLNode *nd) {
     grp->add_operation(rt);
 }
 
-void parse_scale(Group* grp, XMLNode *nd) {
+void Scene::parse_scale(Group* grp, XMLNode *nd) {
     if (grp->has_models())
         throw std::domain_error("Geometric transformations should be specified before models");
 
