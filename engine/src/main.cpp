@@ -1,3 +1,4 @@
+#include <GL/glew.h>
 #include <GL/glut.h>
 #include <iostream>
 #include <vector>
@@ -12,8 +13,8 @@
 using std::vector;
 
 Scene s;
+Scene ship;
 Camera c;
-Ship ship;
 
 void changeSize(int w, int h) {
 
@@ -47,17 +48,17 @@ void renderscene(void) {
     glLoadIdentity();
     glTranslatef(0.0f, -0.6f, -3);
 
-    ship.defineShip();
+    ship.render();
 
     glRotatef(180,1.0,0.0,0.0);
     glTranslatef(0.0f, 00.f, 30);
 
+
     glRotatef(c.getXRot(),1.0,0.0,0.0);
     glRotatef(c.getYRot(),0.0,1.0,0.0);
     glTranslated(-c.getXPos(),-c.getYPos(),-c.getZPos());
-
     s.render();
-
+    
     // End of frame
     glutSwapBuffers();
 }
@@ -69,25 +70,38 @@ void keyboard(unsigned char key, int x, int y){
 
 int main(int argc, char **argv) {
 
-    if (argc == 1) {
-        std::cerr << "Input file required" << std::endl;
-        return 1;
-    }
-
-    try {
-        s.parse(std::string(argv[1]));
-    } catch (std::exception& e) {
-        std::cerr << "ERROR: " << e.what() << std::endl;
-        return 2;
-    }
-
     // init GLUT and the window
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
     glutInitWindowPosition(100,100);
     glutInitWindowSize(800,800);
     glutCreateWindow("Engine");
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glewInit();
 
+
+    if (argc == 1) {
+        std::cerr << "Input file required" << std::endl;
+        return 1;
+    }
+    if (argc == 2){
+        try {
+            s.parse(std::string(argv[1]));
+        } 
+        catch (std::exception& e) {
+            std::cerr << "ERROR: " << e.what() << std::endl;
+            return 2;
+        }        
+    }
+    else{
+        try {
+            s.parse(std::string(argv[1]));
+            ship.parse(std::string(argv[2]));
+        } catch (std::exception& e) {
+            std::cerr << "ERROR: " << e.what() << std::endl;
+            return 2;
+        }
+    }
     // required callback registry
     glutDisplayFunc(renderscene);
     glutIdleFunc (renderscene);

@@ -9,8 +9,7 @@ float xrot = 0, yrot = 0, xpos = 0, zpos = -30, ypos = 0;
 
 
 void Camera::camera_motion(unsigned char key, int x, int y) {
-	int i;
-    switch (key) {
+	  switch (key) {
         case 'i': if(xrot < 45) xrot +=5;
                   if (xrot >360) xrot -= 360;
                   break;

@@ -18,8 +18,10 @@ class Scene {
         void parse_model(Group* grp, tinyxml2::XMLNode *nd);
         void parse_scale(Group* grp, tinyxml2::XMLNode *nd);
         void parse_models(Group* grp, tinyxml2::XMLNode *nd);
-        void parse_rotate(Group* grp, tinyxml2::XMLNode *nd);
+        void parse_ImediateRotate(Group* grp, tinyxml2::XMLNode *nd);
+        void parse_ImediateTranslate(Group* grp, tinyxml2::XMLNode *nd);
         void parse_translate(Group* grp, tinyxml2::XMLNode *nd);
+        void parse_rotate(Group* grp, tinyxml2::XMLNode *nd);
         void parse_color(Group* grp, tinyxml2::XMLNode *nd);
 };
 
