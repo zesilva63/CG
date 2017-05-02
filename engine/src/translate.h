@@ -4,20 +4,25 @@
 #include <tinyxml2.h>
 #include <vector>
 #include "../../src/vertex.h"
+#include "operation.h"
 
-class Translate{
+class Translate : public Operation {
     public:
         Translate();
-        void parse(tinyxml2::XMLElement *sc);
+        void parse(tinyxml2::XMLElement *tr);
         void apply();
-        void add_point(tinyxml2::XMLElement *sc);
-        std::vector<Vertex*> execCurvas();
         const char* type();
+
+        void add_point(tinyxml2::XMLElement *sc);
+        void genCurve();
+        void renderCurve();
     private:
-        double time;
         std::vector<Vertex*> points;
-        void getGlobalCatmullRomPoint(float gt, float *res, std::vector<Vertex*> transpontos);
-        void getCatmullRomPoint(float t,int *indices, float *res, std::vector<Vertex*> transpontos);
+        std::vector<Vertex*> curve;
+        float time;
+        float x;
+        float y;
+        float z;
 };
 
 #endif

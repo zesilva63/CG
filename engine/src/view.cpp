@@ -1,24 +1,32 @@
 #include <GL/glut.h>
-#include "scene.h"
-#include "model.h"
+#include "view.h"
+#include "scale.h"
+#include "rotate.h"
+#include "translate.h"
 
 using tinyxml2::XMLDocument;
-using tinyxml2::XMLNode;
 using tinyxml2::XMLElement;
+using tinyxml2::XMLNode;
 
 using std::vector;
+using std::string;
 
-void Scene::render() {
+static string base_name(string pathname);
+
+void View::render() {
     for(Group *grp: groups)
         grp->render();
 }
 
-void Scene::parse(std::string filename) {
+void View::parse(string filename) {
     XMLDocument doc;
-    XMLNode *node; doc.LoadFile(filename.c_str());
-    if ((node = doc.FirstChild())){
+    XMLNode *node;
+
+    dirname = base_name(filename);
+    doc.LoadFile(filename.c_str());
+
+    if ((node = doc.FirstChild()))
         node = node->FirstChild();
-    }
 
     for(; node; node = node->NextSibling()) {
         if (!strcmp(node->Value(), "group")) {
@@ -28,15 +36,11 @@ void Scene::parse(std::string filename) {
     }
 }
 
-Group* Scene::parse_group(XMLNode *group_node) {
+Group* View::parse_group(XMLNode *group_node) {
     Group *grp = new Group();
     XMLNode *node = group_node->FirstChild();
     for(; node; node = node->NextSibling()) {
-        if (!strcmp(node->Value(), "ImediateTranslate"))
-            parse_ImediateTranslate(grp, node);
-        else if (!strcmp(node->Value(), "ImediateRotate"))
-            parse_ImediateRotate(grp, node);
-        else if (!strcmp(node->Value(), "models"))
+        if (!strcmp(node->Value(), "models"))
             parse_models(grp, node);
         else if (!strcmp(node->Value(), "scale"))
             parse_scale(grp, node);
@@ -53,7 +57,7 @@ Group* Scene::parse_group(XMLNode *group_node) {
     return grp;
 }
 
-void Scene::parse_models(Group* grp, XMLNode *nd) {
+void View::parse_models(Group* grp, XMLNode *nd) {
     XMLNode *model = nd->FirstChild();
 
     for(; model; model = model->NextSibling()) {
@@ -64,51 +68,45 @@ void Scene::parse_models(Group* grp, XMLNode *nd) {
     }
 }
 
-void Scene::parse_model(Group* grp, XMLNode *nd) {
+void View::parse_model(Group* grp, XMLNode *nd) {
     Model *model = new Model();
 
-    model->parse(nd->ToElement());
+    model->parse(dirname, nd->ToElement());
     grp->add_model(model);
 }
 
-void Scene::parse_ImediateTranslate(Group* grp, XMLNode *nd) {
-    Translation *tr = new Translation();
-
-    tr->parse(nd->ToElement());
-    grp->add_operation(tr);
-}
-
-void Scene::parse_ImediateRotate(Group* grp, XMLNode *nd) {
-    Rotation *rt = new Rotation();
-
-    rt->parse(nd->ToElement());
-    grp->add_operation(rt);
-}
-
-void Scene::parse_scale(Group* grp, XMLNode *nd) {
-    Scaling *sc = new Scaling();
+void View::parse_scale(Group* grp, XMLNode *nd) {
+    Scale *sc = new Scale();
 
     sc->parse(nd->ToElement());
     grp->add_operation(sc);
 }
 
-void Scene::parse_translate(Group* grp, XMLNode *nd) {
-    XMLNode *model = nd->FirstChild();
+void View::parse_translate(Group* grp, XMLNode *nd) {
     Translate *tr = new Translate();
     tr->parse(nd->ToElement());
-    
-    for(; model; model = model->NextSibling()) {
-        XMLElement *elem = model->ToElement();
 
-        if (!strcmp(model->Value(), "point"))
-            tr->add_point(elem);
+    XMLNode *point = nd->FirstChild();
+    while(point) {
+        XMLElement *p = point->ToElement();
+
+        if (!strcmp(point->Value(), "point"))
+            tr->add_point(p);
+
+        point = point->NextSibling();
     }
-    grp->add_translate(tr);
+
+    grp->add_operation(tr);
 }
 
-void Scene::parse_rotate(Group* grp, XMLNode *nd) {
+void View::parse_rotate(Group* grp, XMLNode *nd) {
     Rotate *rt = new Rotate();
 
     rt->parse(nd->ToElement());
-    grp->add_rotate(rt);
+    grp->add_operation(rt);
+}
+
+static string base_name(string pathname) {
+    std::size_t found = pathname.find_last_of("/\\");
+    return string(pathname, 0, found+1);
 }

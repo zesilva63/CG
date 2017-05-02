@@ -1,0 +1,107 @@
+<scene>
+	<group>
+		<scale X="0.2" Y="0.3" Z="0.3" />
+		<translate Z="2"/>
+		<group name="maindeck">
+			<scale X="1" Y="0.5" Z="0.5" />
+			<models>
+				<model file="3d/box.3d" R="150" G="150" B="255" />
+			</models>
+		</group>
+		<group name="Main deck back-rigth">
+			<scale X="0.4" Y="0.4" Z="0.25" />
+			<translate X="0.6" Y="0.1" Z="0.7"/>
+			<models>
+				<model file="3d/box.3d" R="0" G="0" B="255" />
+			</models>
+		</group>
+		<group name ="Main deck back-left">
+			<scale X="0.4" Y="0.4" Z="0.25" />
+			<translate X="-0.6" Y="0.1" Z="0.7"/>
+			<models>
+				<model file="3d/box.3d" R="0" G="0" B="255" />
+			</models>
+		</group>
+		<group name ="side deck left">
+			<scale X="0.8" Y="0.4" Z="0.5" />
+			<translate X="-0.3" Y="0" Z="-0.1"/>
+			<rotate angle="45" axisZ="1" />
+			<models>
+				<model file="3d/box.3d" R="0" G="0" B="255" />
+			</models>
+		</group>
+		<group name ="side deck rigth">
+			<scale X="-0.8" Y="0.4" Z="0.5" />
+			<translate X="-1" Y="0" Z="-0.1"/>
+			<rotate angle="-45" axisZ="1" />
+			<models>
+				<model file="3d/box.3d" R="0" G="0" B="255" />
+			</models>
+		</group>
+		<group name ="side deck left top">
+			<scale X="0.7" Y="0.3" Z="0.4" />
+			<translate X="-0.4" Y="0" Z="0.1"/>
+			<rotate angle="40" axisZ="1" />
+			<models>
+				<model file="3d/box.3d" R="150" G="0" B="0" />
+			</models>
+		</group>
+		<group name ="side deck rigth top">
+			<scale X="-0.7" Y="0.3" Z="0.4" />
+			<translate X="-0.4" Y="0" Z="0.1"/>
+			<rotate angle="40" axisZ="1" />
+			<models>
+				<model file="3d/box.3d" R="150" G="0" B="0" />
+			</models>
+		</group>
+		<group name ="wings">
+			<scale X="5" Y="0.1" Z="0.1" />
+			<translate X="0" Y="3" Z="-0.2"/>
+			<models>
+				<model file="3d/box.3d" R="150" G="150" B="255" />
+			</models>
+		</group>
+		<group name ="main propolsor left">
+			<scale X="0.25" Y="0.25" Z="0.25" />
+			<translate X="6" Y="0.8" Z="0.2"/>
+			<models>
+				<model file="3d/sphere.3d" R="255" G="255" B="255" />
+			</models>
+		</group>
+		<group name ="inner propolsor left">
+			<scale X="0.15" Y="0.15" Z="0.15" />
+			<translate X="10" Y="1.3" Z="2"/>
+			<models>
+				<model file="3d/sphere.3d" R="150" G="0" B="30" />
+			</models>
+		</group>
+		<group name ="main propolsor rigth">
+			<scale X="0.25" Y="0.25" Z="0.25" />
+			<translate X="-6" Y="0.8" Z="0.2"/>
+			<models>
+				<model file="3d/sphere.3d" R="255" G="255" B="255" />
+			</models>
+		</group>
+		<group name ="inner propolsor rigth">
+			<scale X="0.15" Y="0.15" Z="0.15" />
+			<translate X="-10" Y="1.3" Z="2"/>
+			<models>
+				<model file="3d/sphere.3d" R="150" G="0" B="30" />
+			</models>
+		</group>
+		<group name ="Secondary propolsor left">
+			<scale X="0.15" Y="0.15" Z="0.15" />
+			<translate X="15" Y="1.8" Z="0.2"/>
+			<models>
+				<model file="3d/sphere.3d" R="255" G="255" B="255" />
+			</models>
+		</group>
+		<group name ="Secondary propolsor left">
+			<scale X="0.15" Y="0.15" Z="0.15" />
+			<translate X="-15" Y="1.8" Z="0.2"/>
+			<models>
+				<model file="3d/sphere.3d" R="255" G="255" B="255" />
+			</models>
+		</group>
+	</group>
+</scene>

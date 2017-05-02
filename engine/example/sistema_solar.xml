@@ -1,0 +1,162 @@
+<scene>
+	<group>
+		<!-- Sol -->
+		<group>
+			<scale X="5" Y="5" Z="5" />
+			<models>
+                <model file="3d/sphere.3d" R="253" G="134" B="19" />
+			</models>
+		</group>
+		<!-- Mercurio -->
+		<group>
+			<rotate time="3" axisX="0" axisY="1" axisZ="0" />
+            <translate X="0" Y="0" Z="7"/>
+			<scale X="0.235" Y="0.235" Z="0.235" />
+			<models>
+				<model file="3d/sphere.3d" R="150" G="150" B="150" />
+			</models>
+		</group>
+		<!-- Venus -->
+		<group>
+			<rotate time="4" axisX="0" axisY="1" axisZ="0" />
+            <translate X="0" Y="0" Z="11"/>
+			<scale X="0.586" Y="0.586" Z="0.586" />
+			<models>
+				<model file="3d/sphere.3d" R="250" G="70" B="50" />
+			</models>
+		</group>
+		<!-- Terra -->
+		<group>
+			<rotate time="5" axisX="0" axisY="1" axisZ="0" />
+            <translate X="0" Y="0" Z="15" />
+			<scale X="0.591" Y="0.591" Z="0.591" />
+			<models>
+				<model file="3d/sphere.3d" R="30" G="50" B="255" />
+			</models>
+			<!-- Lua -->
+			<group>
+                <rotate time="2" axisX="0" axisY="1" axisZ="0" />
+				<translate X="0" Y="0" Z="2" />
+				<scale X="0.35" Y="0.35" Z="0.35" />
+				<models>
+					<model file="3d/sphere.3d" />
+				</models>
+			</group>
+		</group>
+		<!-- Marte -->
+		<group>
+			<rotate time="6" axisX="0" axisY="1" axisZ="0" />
+            <translate X="0" Y="0" Z="20"/>
+			<scale X="0.3" Y="0.3" Z="0.3" />
+			<models>
+				<model file="3d/sphere.3d" R="240" G="50" B="30" />
+			</models>
+		</group>
+		<!-- Jupiter -->
+		<group>
+			<rotate time="9" axisX="0" axisY="1" axisZ="0" />
+            <translate X="0" Y="0" Z="33"/>
+			<scale X="1.5" Y="1.5" Z="1.5" />
+			<models>
+				<model file="3d/sphere.3d" R="250" G="200" B="203" />
+			</models>
+			<!-- Io -->
+			<group>
+                <rotate time="2" axisX="1" axisY="1" axisZ="0" />
+				<translate X="0" Y="1" Z="2" />
+				<scale X="0.1" Y="0.1" Z="0.1" />
+				<models>
+					<model file="3d/sphere.3d" />
+				</models>
+			</group>
+			<!-- Europa -->
+			<group>
+                <rotate time="2" axisX="0" axisY="-1" axisZ="-1" />
+				<translate X="1" Y="0" Z="1" />
+				<scale X="0.09" Y="0.09" Z="0.09" />
+				<models>
+					<model file="3d/sphere.3d" />
+				</models>
+			</group>
+			<!-- Ganimedes -->
+			<group>
+                <rotate time="2" axisX="0" axisY="0" axisZ="1" />
+				<translate X="0.5" Y="0" Z="2.2" />
+				<scale X="0.15" Y="0.15" Z="0.15" />
+				<models>
+					<model file="3d/sphere.3d" />
+				</models>
+			</group>
+			<!-- Calisto -->
+			<group>
+                <rotate time="2" axisX="-2" axisY="0" axisZ="1" />
+				<translate X="0" Y="1" Z="1.3" />
+				<scale X="0.14" Y="0.14" Z="0.14" />
+				<models>
+					<model file="3d/sphere.3d" />
+				</models>
+			</group>
+		</group>
+		<!-- Saturno -->
+		<group>
+			<rotate time="14" axisX="0" axisY="1" axisZ="0" />
+            <translate X="0" Y="0" Z="43"/>
+			<scale X="1.2" Y="1.2" Z="1.2" />
+			<models>
+				<model file="3d/sphere.3d" R="240" G="230" B="180" />
+			</models>
+			<!-- Titã -->
+			<group>
+                <rotate time="2" axisX="0" axisY="1" axisZ="0" />
+				<translate X="0" Y="0" Z="1.75" />
+				<scale X="0.2" Y="0.2" Z="0.2" />
+				<models>
+					<model file="3d/sphere.3d" />
+				</models>
+			</group>
+		</group>
+		<!-- Urano -->
+		<group>
+			<rotate time="16" axisX="0" axisY="1" axisZ="0" />
+            <translate X="0" Y="0" Z="49" />
+			<scale X="0.86" Y="0.86" Z="0.86" />
+			<models>
+				<model file="3d/sphere.3d" R="60" G="40" B="200" />
+			</models>
+		</group>
+		<!-- Neptuno -->
+		<group>
+			<rotate time="19" axisX="0" axisY="1" axisZ="0" />
+            <translate X="0" Y="0" Z="55"/>
+			<scale X="0.85" Y="0.85" Z="0.85" />
+			<models>
+				<model file="3d/sphere.3d" R="60" G="40" B="250" />
+			</models>
+			<!-- Tritão -->
+			<group>
+                <rotate time="2" axisX="0" axisY="1" axisZ="0" />
+				<translate X="0" Y="0" Z="2" />
+				<scale X="0.2" Y="0.2" Z="0.2" />
+				<models>
+					<model file="3d/sphere.3d" />
+				</models>
+			</group>
+		</group>
+	<!-- </group> -->
+    <!-- Cometa -->
+        <!-- <group> -->
+        <group>
+            <translate time="8" >
+                <point X="0"   Y="0" Z="-15" />
+                <point X="10"  Y="0" Z="5" />
+                <point X="0"   Y="0" Z="90" />
+                <point X="-15" Y="0" Z="5" />
+            </translate>
+            <rotate angle="45" X="0" Y="1" Z="0"/>
+            <scale X="0.1" Y="0.1" Z="0.1" />
+            <models>
+                <model file="3d/teapot.3d" R="150" G="150" B="255" />
+            </models>
+        </group>
+    </group>
+</scene>

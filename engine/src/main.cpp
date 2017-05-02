@@ -5,14 +5,14 @@
 #include <math.h>
 
 #include <exception>
-#include "scene.h"
+#include "view.h"
 #include "camera.h"
 #include "../../src/vertex.h"
 
 using std::vector;
 
-Scene s;
-Scene ship;
+View scene;
+View ship;
 Camera c;
 
 void changeSize(int w, int h) {
@@ -54,12 +54,11 @@ void renderscene(void) {
     glRotatef(180,1.0,0.0,0.0);
     glTranslatef(0.0f, 00.f, 30);
 
-
     glRotatef(c.getXRot(),1.0,0.0,0.0);
     glRotatef(c.getYRot(),0.0,1.0,0.0);
     glTranslated(-c.getXPos(),-c.getYPos(),-c.getZPos());
-    s.render();
-    
+    scene.render();
+
     // End of frame
     glutSwapBuffers();
 }
@@ -80,32 +79,23 @@ int main(int argc, char **argv) {
     glEnableClientState(GL_VERTEX_ARRAY);
     glewInit();
 
-
-    if (argc == 1) {
-        std::cerr << "Input file required" << std::endl;
-        return 1;
-    }
-    if (argc == 2){
-        try {
-            s.parse(std::string(argv[1]));
-        } 
-        catch (std::exception& e) {
-            std::cerr << "ERROR: " << e.what() << std::endl;
-            return 2;
-        }        
-    }
-    else{
-        try {
-            s.parse(std::string(argv[1]));
-            ship.parse(std::string(argv[2]));
-        } catch (std::exception& e) {
-            std::cerr << "ERROR: " << e.what() << std::endl;
-            return 2;
+    try {
+        switch(argc) {
+            case 1: std::cerr << "Input file required" << std::endl;
+                    return 1;
+            case 2: scene.parse(std::string(argv[1]));
+                    break;
+            default: scene.parse(std::string(argv[1]));
+                     ship.parse(std::string(argv[2]));
         }
+    } catch (std::exception& e) {
+        std::cerr << "ERROR: " << e.what() << std::endl;
+        return 2;
     }
+
     // required callback registry
     glutDisplayFunc(renderscene);
-    glutIdleFunc (renderscene);
+    glutIdleFunc(renderscene);
     glutReshapeFunc(changeSize);
 
     // register keyboard callbacks

@@ -11,8 +11,6 @@ using std::getline;
 using std::exception;
 using tinyxml2::XMLElement;
 
-GLuint buffers[1];
-
 void Model::setColor(XMLElement* model) {
     int cred = 255, cgreen = 255, cblue = 255;
 
@@ -25,82 +23,75 @@ void Model::setColor(XMLElement* model) {
     blue = (double) cblue / 255;
 }
 
-void Model::parse(XMLElement* model) {
-    string line;
-    const char* filename = model->Attribute("file");
-    ifstream ifile(filename);
-    n=0;
-    int indice =0;
+void Model::parse(string directory, XMLElement* model) {
+    string line, filename = string( model->Attribute("file") );
+    int size;
 
     setColor(model);
 
+    ifstream ifile((directory + filename).c_str());
     if (ifile.fail())
         throw std::ios_base::failure(string("Couldn't find file: ") + filename);
-
-    while(getline(ifile,line)) n++;
-    
-    ifile.clear();
-    ifile.seekg(0, std::ios::beg);
-
-    vertexData = (float*) malloc((n+1)*3*sizeof(float));
-    glGenBuffers(1, buffers);
 
     while(getline(ifile, line)) {
         try {
             Vertex *v = new Vertex(line);
-            vertexData[indice++]=v->getX();
-            vertexData[indice++]=v->getY();
-            vertexData[indice++]=v->getZ();   
+            vertices.push_back(v->getX());
+            vertices.push_back(v->getY());
+            vertices.push_back(v->getZ());
         } catch (exception& e) {
             throw std::invalid_argument(
               std::string("Couldn't parse file ") + filename + ": " + e.what());
         }
     }
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+
+    glGenBuffers(1, &buffers);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers);
+
+    size = vertices.size() * sizeof(float);
+    glBufferData(GL_ARRAY_BUFFER, size, vertices.data(), GL_STATIC_DRAW);
 }
 
 void Model::render() {
-    glBufferData(GL_ARRAY_BUFFER,n*3*sizeof(float),vertexData,GL_STATIC_DRAW);
+    int size = vertices.size() * sizeof(float);
+
     glColor3f(red, green, blue);
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-    glVertexPointer(3, GL_FLOAT,0,0);
-    glDrawArrays(GL_TRIANGLE_STRIP,0,n);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers);
+    glVertexPointer(3, GL_FLOAT, 0, 0);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, size / 3);
+
     glColor3f(1, 1, 1);
 }
 
 void Group::render() {
     glPushMatrix();
+
     for(Operation *op: ops)
         op->apply();
 
-    for(Translate *tran: trans)
-        tran->apply();
-
-    for(Rotate *rot: rots)
-        rot->apply();
+    for(Model *m: models)
+        m->render();
 
     for(Group *chld : children)
         chld->render();
-    
-    for(Model *m: models)
-        m->render();
 
     glPopMatrix();
 }
 
 void Group::add_operation(Operation *op) {
+    if (has_models())
+        throw std::domain_error("Geometric transformations should be specified before models");
+
+    if (has_operation(op->type()))
+        throw std::domain_error("There must be only a geometric transformation of the same type inside a group");
+
     ops.push_back(op);
 }
 
-void Group::add_rotate(Rotate* rot) {
-    rots.push_back(rot);
-}
-
-void Group::add_translate(Translate* tran) {
-    trans.push_back(tran);
-}
-
 void Group::add_model(Model *m) {
+    if (has_models())
+        throw std::domain_error("Geometric transformations should be specified before models");
+
     models.push_back(m);
 }
 
