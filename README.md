@@ -1,4 +1,0 @@
-# CG
-# Dependecies
-
-- tinyxml2

@@ -7,7 +7,6 @@
 #include <exception>
 #include "scene.h"
 #include "camera.h"
-#include "ship.h"
 #include "../../src/vertex.h"
 
 using std::vector;
@@ -48,7 +47,9 @@ void renderscene(void) {
     glLoadIdentity();
     glTranslatef(0.0f, -0.6f, -3);
 
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     ship.render();
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     glRotatef(180,1.0,0.0,0.0);
     glTranslatef(0.0f, 00.f, 30);

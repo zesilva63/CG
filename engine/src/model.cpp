@@ -12,7 +12,6 @@ using std::exception;
 using tinyxml2::XMLElement;
 
 GLuint buffers[1];
-int n;
 
 void Model::setColor(XMLElement* model) {
     int cred = 255, cgreen = 255, cblue = 255;
@@ -43,19 +42,15 @@ void Model::parse(XMLElement* model) {
     ifile.clear();
     ifile.seekg(0, std::ios::beg);
 
-    vertexData = (float*) malloc(n*3*sizeof(float));
+    vertexData = (float*) malloc((n+1)*3*sizeof(float));
     glGenBuffers(1, buffers);
 
     while(getline(ifile, line)) {
         try {
             Vertex *v = new Vertex(line);
             vertexData[indice++]=v->getX();
-            
             vertexData[indice++]=v->getY();
-            
-            vertexData[indice++]=v->getZ();
-            
-            
+            vertexData[indice++]=v->getZ();   
         } catch (exception& e) {
             throw std::invalid_argument(
               std::string("Couldn't parse file ") + filename + ": " + e.what());
@@ -65,7 +60,6 @@ void Model::parse(XMLElement* model) {
 }
 
 void Model::render() {
-    
     glBufferData(GL_ARRAY_BUFFER,n*3*sizeof(float),vertexData,GL_STATIC_DRAW);
     glColor3f(red, green, blue);
     glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
@@ -84,12 +78,12 @@ void Group::render() {
 
     for(Rotate *rot: rots)
         rot->apply();
-    
-    for(Model *m: models)
-        m->render();
 
     for(Group *chld : children)
         chld->render();
+    
+    for(Model *m: models)
+        m->render();
 
     glPopMatrix();
 }

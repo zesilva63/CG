@@ -18,6 +18,7 @@ class Model {
         std::vector<Vertex*> vertices;
         double red, green, blue;
         void setColor(tinyxml2::XMLElement *model);
+        double n;
 };
 
 class Group {
