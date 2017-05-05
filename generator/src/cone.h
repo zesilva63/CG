@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "../../src/vertex.h"
+#include "../../src/shape.h"
 
 /*
 Generates a cone with a given base radius, height, slices and stacks by the user 
@@ -13,6 +14,6 @@ Generates a cone with a given base radius, height, slices and stacks by the user
 @param stacks, number of divisions vertically
 @returns a vector with all the vertices of generated cone
 */
-std::vector<Vertex*> cone(float radius, float height, int slices, int stacks);
+Shape* cone(float radius, float height, int slices, int stacks);
 
 #endif

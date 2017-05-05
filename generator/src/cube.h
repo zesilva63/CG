@@ -2,7 +2,7 @@
 #define __CUBE_H__
 
 #include <vector>
-#include "../../src/vertex.h"
+#include "../../src/shape.h"
 
 
 /**
@@ -14,6 +14,6 @@
  * @param n number of divisions
  * @returns a vector with all the vertices of generated cube
  */
-std::vector<Vertex*> cube(float x, float y, float z, int n);
+Shape* cube(float x, float y, float z, int n);
 
 #endif

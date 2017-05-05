@@ -1,4 +1,5 @@
 #include "../../src/vertex.h"
+#include "../../src/shape.h"
 #include "cube.h"
 #include "plane.h"
 #include "cone.h"
@@ -15,10 +16,10 @@ using std::ofstream;
 void print_usage();
 void generate_plane(char* size, char* file_path);
 void generate_cube(char* x, char* y, char* z, char* n, char* file_path);
-void generate_cone(char* radious, char* height, char* stacks, char* slices, char* file_path);
+//void generate_cone(char* radious, char* height, char* stacks, char* slices, char* file_path);
 void generate_sphere(char* radious, char* verticalLayers, char* horizontalLayers, char* file_path);
-void generate_patch(char* file_in, char* tesselate, char* file_out);
-void write_file(vector<Vertex*> v, char* file_path);
+//void generate_patch(char* file_in, char* tesselate, char* file_out);
+void write_file(Shape* v, char* file_path);
 
 int main (int argc, char** argv) {
     if (argc == 1)
@@ -27,12 +28,12 @@ int main (int argc, char** argv) {
         generate_plane(argv[2], argv[3]);
     else if (!strcmp(argv[1], "box") && argc == 7)
         generate_cube(argv[2], argv[3], argv[4], argv[5], argv[6]);
-    else if(!strcmp(argv[1], "cone") && argc == 7)
-        generate_cone(argv[2], argv[3], argv[4], argv[5], argv[6]);
+/*    else if(!strcmp(argv[1], "cone") && argc == 7)
+        generate_cone(argv[2], argv[3], argv[4], argv[5], argv[6]); */
     else if(!strcmp(argv[1], "sphere") && argc == 6)
         generate_sphere(argv[2], argv[3], argv[4], argv[5]);
-    else if(!strcmp(argv[1], "patch") && argc == 5)
-        generate_patch(argv[2], argv[3], argv[4]);
+/*    else if(!strcmp(argv[1], "patch") && argc == 5)
+        generate_patch(argv[2], argv[3], argv[4]); */
     else print_usage();
 
     return 0;
@@ -42,7 +43,7 @@ void generate_plane(char* size, char* file_path) {
     float f_size = atof(size);
     ofstream file;
 
-    vector<Vertex*> shape = plane(f_size);
+    Shape* shape = plane(f_size);
     write_file(shape, file_path);
 }
 
@@ -55,10 +56,10 @@ void generate_cube(char* x, char* y, char* z, char* n, char* file_path){
     f_z = atof(z);
     i_n = atoi(n);
 
-    vector<Vertex*> shape = cube(f_x, f_y, f_z, i_n);
+    Shape* shape = cube(f_x, f_y, f_z, i_n);
     write_file(shape, file_path);
 }
-
+/*
 void generate_cone(char* radious, char* height, char* stacks, char* slices, char* file_path){
     float r,h;
     int st,sl;
@@ -68,10 +69,10 @@ void generate_cone(char* radious, char* height, char* stacks, char* slices, char
     st = atoi(stacks);
     sl = atoi(slices);
 
-    vector<Vertex*> shape = cone(r,h,st,sl);
+    Shape* shape = cone(r,h,st,sl);
     write_file(shape, file_path);
 }
-
+*/
 
 void generate_sphere(char* radious, char* verticalLayers, char* horizontalLayers, char* file_path){
     float r;
@@ -81,27 +82,32 @@ void generate_sphere(char* radious, char* verticalLayers, char* horizontalLayers
     vL = atoi(verticalLayers);
     hL = atoi(horizontalLayers);
 
-    vector<Vertex*> shape = sphere(r,vL,hL);
+    Shape* shape = sphere(r,vL,hL);
     write_file(shape, file_path);
 }
-
+/*
 void generate_patch(char* file_in, char* tesselate, char* file_out){
     int n;
 
     n = atoi(tesselate);
-    
-    vector<Vertex*> shape = patch(file_in,n);
+
+    Shape* shape = patch(file_in,n);
     write_file(shape, file_out);
 }
+*/
 
-
-void write_file(vector<Vertex*> shape, char* file_path){
-    ofstream file;
+void write_file(Shape* shape, char* file_path){
     char buffer[1024];
+    ofstream file;
+    int i, n = shape.size();
+    Vertex *v, *n, *t;
 
     file.open(file_path);
-    for (Vertex* v : shape) {
-        sprintf(buffer, "%f %f %f\n", v->getX(), v->getY(), v->getZ());
+    for (i = 0; i < n; i++) {
+        shape.getVertex(i, &v, &n, &t);
+        sprintf(buffer, "V %f %f %f\n", v->getX(), v->getY(), v->getZ());
+        sprintf(buffer, "N %f %f %f\n", n->getX(), n->getY(), n->getZ());
+        sprintf(buffer, "T %f %f %f\n", t->getX(), t->getY(), t->getZ());
         file << buffer;
     }
     file.close();

@@ -5,14 +5,14 @@
 #include <iostream>
 #include <fstream>
 
-#include "../../src/vertex.h"
+#include "../../src/shape.h"
 
 
 /**
  * Generates a square in the XZ plane, centered in the origin.
  * @param size size of square
- * @returns a vector with all the vertices generated for the plane
+ * @returns a Shape with all the information of the generated plane
  */
-std::vector<Vertex*> plane(float size);
+Shape* plane(float size);
 
 #endif

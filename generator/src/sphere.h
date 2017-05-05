@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "../../src/vertex.h"
+#include "../../src/shape.h"
 
-std::vector<Vertex*> sphere(double raio, int verticalLayers, int horizontalLayers);
+Shape* sphere(double raio, int verticalLayers, int horizontalLayers);
 
 #endif

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "../../src/vertex.h"
+#include "../../src/shape.h"
 
 
 
@@ -13,6 +14,6 @@ Generates an list of surfaces from a given patch
 @param tesselate, number of precision to make the bezier surface
 @returns a vector with all the vertices of generated surfaces
 */
-std::vector<Vertex*> patch(char *file, int tesselate);
+Shape* patch(char *file, int tesselate);
 
 #endif

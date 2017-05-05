@@ -28,12 +28,12 @@ vector<Vertex*> patch(char * file,int n) {
 	string line;
 	ifstream ifile(file);
 	int j = 0;
-	
+
 	if (ifile.fail())
     	throw std::ios_base::failure(string("Couldn't find file: ") + file);
-	
-	getline(ifile,line);    
-	
+
+	getline(ifile,line);
+
 	patches_size = stoi(line);
 	patches = (int *) malloc (sizeof(int)*patches_size*16);
 
