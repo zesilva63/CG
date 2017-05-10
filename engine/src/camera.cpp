@@ -1,84 +1,51 @@
+#include <string.h>
 #include <GL/glut.h>
 #include <fstream>
 #include <exception>
 #include <math.h>
 #include "camera.h"
 
+Camera::Camera() {
+    ypos = 0;
+    xpos = zpos = -10;
+    look_at_y = look_at_z = look_at_x = 0;
 
-float xrot = 0, yrot = 0, xpos = 0, zpos = -30, ypos = 0; 
+    memset(keys, 0, sizeof(bool)*256);
+}
 
+void Camera::key_down(unsigned int key) {
+    keys[key] = true;
+}
 
-void Camera::camera_motion(unsigned char key, int x, int y) {
-	  switch (key) {
-        case 'i': if(xrot < 45) xrot +=5;
-                  if (xrot >360) xrot -= 360;
-                  break;
-        case 'k': if(xrot > -45) xrot-=5;
-                  if (xrot < -360) xrot += 360;
-                  break;
-        case 'l': yrot +=5;
-                  if (yrot >360) yrot -= 360;
-                  break;
-        case 'j': yrot-=5;
-                  if (yrot < -360) yrot += 360;
-                  break;
-        case'a': xpos -=cos(yrot /180 * 3.141592653589793);
-                 zpos -=sin(yrot /180 * 3.141592653589793);
-                 break;
+void Camera::key_up(unsigned int key) {
+    keys[key] = false;
+}
 
-        case'd': xpos +=cos(yrot /180 * 3.141592653589793);
-                 zpos +=sin(yrot /180 * 3.141592653589793);
-                 break;
-
-        case'w': zpos +=cos(yrot /180 * 3.141592653589793);
-                 xpos -=sin(yrot /180 * 3.141592653589793);
-                 ypos +=sin(xrot /180 * 3.141592653589793);
-                 break;
-
-        case's': zpos -=cos(yrot /180 * 3.141592653589793);
-                 xpos +=sin(yrot /180 * 3.141592653589793);
-                 ypos -=sin(xrot /180 * 3.141592653589793);
-                 break;
+void Camera::apply() {
+    if (keys['w']) {
+        zpos += 0.6;
+        look_at_z += 0.6;
     }
-    glutPostRedisplay();
+
+    if (keys['a']) {
+        xpos += 0.6;
+        look_at_x += 0.6;
+    }
+
+    if (keys['s']) {
+        zpos -= 0.6;
+        look_at_z -= 0.6;
+    }
+
+    if (keys['d']) {
+        xpos -= 0.6;
+        look_at_x -= 0.6;
+    }
 }
 
-float Camera::getXPos(){
-	return xpos;
-}
-
-float Camera::getYPos(){
-	return ypos;
-}
-
-float Camera::getZPos(){
-	return zpos;
-}
-
-float Camera::getXRot(){
-	return xrot;
-}
-
-float Camera::getYRot(){
-	return yrot;
-}
-
-void Camera::setXPos(float x){
-	xpos = x;
-}
-
-void Camera::setYPos(float y){
-	ypos = y;
-}
-
-void Camera::setZPos(float z){
-	zpos = z;
-}
-
-void Camera::setXRot(float x){
-	xrot = x;
-}
-
-void Camera::setYRot(float y){
-	yrot = y;
+void Camera::view() {
+    apply();
+    gluLookAt(xpos, ypos, zpos,
+              look_at_x, ypos, look_at_z,
+              0, 1, 0);
 }

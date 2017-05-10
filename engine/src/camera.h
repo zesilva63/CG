@@ -3,23 +3,21 @@
 
 class Camera {
     public:
-        float getXPos();
-        float getYPos();
-        float getZPos();
-        float getXRot();
-        float getYRot();
-        void setXPos(float x);
-        void setYPos(float y);
-        void setZPos(float z);
-        void setXRot(float x);
-        void setYRot(float y);
-        void camera_motion(unsigned char key, int x, int y);
+        Camera();
+        void key_down(unsigned int key);
+        void key_up(unsigned int key);
+        void view();
 
     private:
-        float xrot;
-        float yrot;
         float xpos;
+        float ypos;
         float zpos;
+        float look_at_x;
+        float look_at_y;
+        float look_at_z;
+        bool keys[256];
+
+        void apply();
 };
 
 #endif
