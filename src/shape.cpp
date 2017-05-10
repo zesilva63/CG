@@ -6,15 +6,7 @@ using std::vector;
 using std::ifstream;
 using std::string;
 
-Shape::Shape(vector<Vertex*> vs, vector<Vertex*> ns, vector<Vertex*> te) {
-    vertices = vs;
-    normals = ns;
-    texture = te;
-}
-
-Shape::Shape() { }
-
-Shape::Shape(string file_path) {
+void Shape::load_file(string file_path) {
     string line;
     char t;
 
@@ -74,4 +66,37 @@ int Shape::size() {
     return vertices.size();
 }
 
-Shape::~Shape(void) {}
+vector<float> *Shape::get_vertices() {
+    vector<float> *vec = new vector<float>();
+
+    for (Vertex *v: vertices) {
+        vec->push_back(v->getX());
+        vec->push_back(v->getY());
+        vec->push_back(v->getZ());
+    }
+
+    return vec;
+}
+
+vector<float> *Shape::get_normals() {
+    vector<float> *vec = new vector<float>();
+
+    for (Vertex *v: normals) {
+        vec->push_back(v->getX());
+        vec->push_back(v->getY());
+        vec->push_back(v->getZ());
+    }
+
+    return vec;
+}
+
+vector<float> *Shape::get_texture() {
+    vector<float> *vec = new vector<float>();
+
+    for (Vertex *v: normals) {
+        vec->push_back(v->getX());
+        vec->push_back(v->getY());
+    }
+
+    return vec;
+}

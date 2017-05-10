@@ -8,6 +8,7 @@ class Vertex {
         float x;
         float y;
         float z;
+        float normal;
 
     public:
         Vertex(float x, float y, float z);
@@ -16,10 +17,10 @@ class Vertex {
         float getX();
         float getY();
         float getZ();
+
         static Vertex* sub(Vertex*, Vertex*);
         static Vertex* cross_product(Vertex*, Vertex*);
         static Vertex* normalize(Vertex* v);
-
         virtual ~Vertex(void);
 };
 

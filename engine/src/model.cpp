@@ -2,65 +2,140 @@
 #include <GL/glut.h>
 #include <fstream>
 #include <exception>
-#include <iostream>
 #include "model.h"
+#include <IL/il.h>
 
 using std::string;
 using std::ifstream;
 using std::getline;
 using std::exception;
 using tinyxml2::XMLElement;
+using tinyxml2::XMLError;
 
-void Model::setColor(XMLElement* model) {
-    int cred = 255, cgreen = 255, cblue = 255;
+using std::vector;
 
-    model->QueryIntAttribute("R", &cred);
-    model->QueryIntAttribute("G", &cgreen);
-    model->QueryIntAttribute("B", &cblue);
+Model::Model() {
+    vertices = 0;
+    normals = 0;
+    texture = 0;
+    tex_points = 0;
+    color[3] = 1.0f;
+}
 
-    red = (double) cred / 255;
-    green = (double) cgreen / 255;
-    blue = (double) cblue / 255;
+bool Model::parse_diffuse(XMLElement* model) {
+    XMLError r1 = model->QueryFloatAttribute("diffR", &color[0]);
+    XMLError r2 = model->QueryFloatAttribute("diffG", &color[1]);
+    XMLError r3 = model->QueryFloatAttribute("diffB", &color[2]);
+
+    light_type = GL_DIFFUSE;
+    return !r1 && !r2 && !r3;
+}
+
+bool Model::parse_specular(XMLElement* model) {
+    XMLError r1 = model->QueryFloatAttribute("specR", &color[0]);
+    XMLError r2 = model->QueryFloatAttribute("specG", &color[1]);
+    XMLError r3 = model->QueryFloatAttribute("specB", &color[2]);
+
+    light_type = GL_SPECULAR;
+    return !r1 && !r2 && !r3;
+}
+
+bool Model::parse_emission(XMLElement* model) {
+    XMLError r1 = model->QueryFloatAttribute("emiR", &color[0]);
+    XMLError r2 = model->QueryFloatAttribute("emiG", &color[1]);
+    XMLError r3 = model->QueryFloatAttribute("emiB", &color[2]);
+
+    light_type = GL_EMISSION;
+    return !r1 && !r2 && !r3;
+}
+
+bool Model::parse_ambient(XMLElement* model) {
+    XMLError r1 = model->QueryFloatAttribute("ambR", &color[0]);
+    XMLError r2 = model->QueryFloatAttribute("ambG", &color[1]);
+    XMLError r3 = model->QueryFloatAttribute("ambB", &color[2]);
+
+    light_type = GL_AMBIENT;
+    return !r1 && !r2 && !r3;
+}
+
+bool Model::parse_light(XMLElement* model) {
+    return parse_diffuse(model)  ||
+           parse_specular(model) ||
+           parse_emission(model) ||
+           parse_ambient(model);
 }
 
 void Model::parse(string directory, XMLElement* model) {
-    string line, filename = string( model->Attribute("file") );
-    int size;
+    string line, filename = string(model->Attribute("file"));
+    vector<float> *vec;
+    Shape s;
 
-    setColor(model);
+    /* parse_texture(directory, model); */
+    parse_light(model);
+    s.load_file(directory + filename);
+    glGenBuffers(3, buffers);
 
-    ifstream ifile((directory + filename).c_str());
-    if (ifile.fail())
-        throw std::ios_base::failure(string("Couldn't find file: ") + filename);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+    vec = s.get_vertices();
+    vertices = vec->size();
+    glBufferData(GL_ARRAY_BUFFER, vertices*sizeof(float), vec->data(), GL_STATIC_DRAW);
 
-    while(getline(ifile, line)) {
-        try {
-            Vertex *v = new Vertex(line);
-            vertices.push_back(v->getX());
-            vertices.push_back(v->getY());
-            vertices.push_back(v->getZ());
-        } catch (exception& e) {
-            throw std::invalid_argument(
-              std::string("Couldn't parse file ") + filename + ": " + e.what());
-        }
-    }
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+    vec = s.get_normals();
+    normals = vec->size();
+    glBufferData(GL_ARRAY_BUFFER, normals*sizeof(float), vec->data(), GL_STATIC_DRAW);
 
-    glGenBuffers(1, &buffers);
-    glBindBuffer(GL_ARRAY_BUFFER, buffers);
+    glBindTexture(GL_ARRAY_BUFFER, buffers[2]);
+    vec = s.get_texture();
+    tex_points = vec->size();
+    glBufferData(GL_ARRAY_BUFFER, tex_points*sizeof(float), vec->data(), GL_STATIC_DRAW);
+}
 
-    size = vertices.size() * sizeof(float);
-    glBufferData(GL_ARRAY_BUFFER, size, vertices.data(), GL_STATIC_DRAW);
+void Model::parse_texture(string directory, XMLElement* model) {
+    const char *filename = model->Attribute("texture");
+
+    if (filename == NULL)
+        return;
+
+    load_texture((directory + string(filename)).c_str());
+}
+
+void Model::load_texture(const char* tex_file) {
+    unsigned int t,tw,th;
+    unsigned char *texData;
+    ilGenImages(1,&t);
+    ilBindImage(t);
+    ilLoadImage((ILstring) tex_file);
+
+    tw = ilGetInteger(IL_IMAGE_WIDTH);
+    th = ilGetInteger(IL_IMAGE_HEIGHT);
+    ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+    texData = ilGetData();
+
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D,texture);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
 }
 
 void Model::render() {
-    int size = vertices.size() * sizeof(float);
+    /* glMaterialfv(GL_FRONT, light_type, color); */
+    glBindTexture(GL_TEXTURE_2D, texture);
 
-    glColor3f(red, green, blue);
-    glBindBuffer(GL_ARRAY_BUFFER, buffers);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
     glVertexPointer(3, GL_FLOAT, 0, 0);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, size / 3);
 
-    glColor3f(1, 1, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+    glNormalPointer(GL_FLOAT, 0, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+    glTexCoordPointer(2, GL_FLOAT, 0, 0);
+
+    glDrawArrays(GL_TRIANGLES, 0, vertices / 3);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Group::render() {

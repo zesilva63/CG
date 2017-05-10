@@ -12,9 +12,7 @@ class Shape {
         std::vector<Vertex*> texture;
 
     public:
-        Shape(std::vector<Vertex*> vertices, std::vector<Vertex*> normals, std::vector<Vertex*> texture);
-        Shape();
-        Shape(std::string file_path);
+        void load_file(std::string file_path);
         void get_vertex(int i, Vertex** vertex, Vertex** normal, Vertex** texture);
         void push_vertex(Vertex* v);
         void push_normal(Vertex* n);
@@ -22,8 +20,9 @@ class Shape {
         void push_shape(Shape* s);
         void reverse();
         int size();
-
-        virtual ~Shape(void);
+        std::vector<float> *get_vertices();
+        std::vector<float> *get_normals();
+        std::vector<float> *get_texture();
 };
 
 #endif

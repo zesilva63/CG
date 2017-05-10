@@ -18,6 +18,11 @@ void View::render() {
         grp->render();
 }
 
+void View::render_lights() {
+    for(Light *l: lights)
+        l->render();
+}
+
 void View::parse(string filename) {
     XMLDocument doc;
     XMLNode *node;
@@ -55,6 +60,21 @@ Group* View::parse_group(XMLNode *group_node) {
     }
 
     return grp;
+}
+
+void View::parse_lights(XMLNode *light_node) {
+    XMLNode *light = light_node->FirstChild();
+
+    for(; light; light = light->NextSibling()) {
+        XMLElement *elem = light->ToElement();
+
+        if (!strcmp(elem->Value(), "light")) {
+            Light *light = new Light();
+            light->parse(elem);
+
+            lights.push_back(light);
+        }
+    }
 }
 
 void View::parse_models(Group* grp, XMLNode *nd) {

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
+#include <IL/il.h>
 
 #include <exception>
 #include "view.h"
@@ -47,9 +48,9 @@ void renderscene(void) {
     glLoadIdentity();
     glTranslatef(0.0f, -0.6f, -3);
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    ship.render();
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    /* glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); */
+    /* ship.render(); */
+    /* glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); */
 
     glRotatef(180,1.0,0.0,0.0);
     glTranslatef(0.0f, 00.f, 30);
@@ -57,6 +58,8 @@ void renderscene(void) {
     glRotatef(c.getXRot(),1.0,0.0,0.0);
     glRotatef(c.getYRot(),0.0,1.0,0.0);
     glTranslated(-c.getXPos(),-c.getYPos(),-c.getZPos());
+
+    scene.render_lights();
     scene.render();
 
     // End of frame
@@ -76,8 +79,30 @@ int main(int argc, char **argv) {
     glutInitWindowPosition(100,100);
     glutInitWindowSize(800,800);
     glutCreateWindow("Engine");
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
     glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glewInit();
+
+    // required callback registry
+    glutDisplayFunc(renderscene);
+    glutIdleFunc(renderscene);
+    glutReshapeFunc(changeSize);
+
+    // register keyboard callbacks
+    glutKeyboardFunc(keyboard);
+
+    ilInit();
+    ilEnable(IL_ORIGIN_SET);
+    ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
+
+    // OpenGL settings
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     try {
         switch(argc) {
@@ -93,17 +118,6 @@ int main(int argc, char **argv) {
         return 2;
     }
 
-    // required callback registry
-    glutDisplayFunc(renderscene);
-    glutIdleFunc(renderscene);
-    glutReshapeFunc(changeSize);
-
-    // register keyboard callbacks
-    glutKeyboardFunc(keyboard);
-
-    // OpenGL settings
-    glEnable(GL_DEPTH_TEST);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // enter GLUT's main cycle
     glutMainLoop();
