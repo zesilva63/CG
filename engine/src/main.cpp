@@ -46,11 +46,11 @@ void renderscene(void) {
 
     // set the camera
     glLoadIdentity();
-    /* glTranslatef(0.0f, -0.6f, -3); */
 
-    /* glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); */
-    /* ship.render(); */
-    /* glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); */
+    glTranslatef(0.0f, -0.6f, -3);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    ship.render();
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     /* glRotatef(180,1.0,0.0,0.0); */
     /* glTranslatef(0.0f, 00.f, 30); */
@@ -63,13 +63,20 @@ void renderscene(void) {
     glutSwapBuffers();
 }
 
-
 void key_up(unsigned char key, int x, int y) {
     c.key_up(key);
 }
 
 void key_down(unsigned char key, int x, int y) {
     c.key_down(key);
+}
+
+void mouse_button(int button, int state, int x, int y) {
+    c.mouse_button(button, state, x, y);
+}
+
+void mouse_move(int x, int y) {
+    c.mouse_move(x, y);
 }
 
 int main(int argc, char **argv) {
@@ -119,8 +126,8 @@ int main(int argc, char **argv) {
         return 2;
     }
 
-<<<<<<< HEAD
-=======
+    c = Camera();
+
     // required callback registry
     glutDisplayFunc(renderscene);
     glutIdleFunc(renderscene);
@@ -129,12 +136,13 @@ int main(int argc, char **argv) {
     // register keyboard callbacks
     glutKeyboardFunc(key_down);
     glutKeyboardUpFunc(key_up);
+    glutMouseFunc(mouse_button);
+    glutMotionFunc(mouse_move);
 
     // OpenGL settings
     glEnable(GL_DEPTH_TEST);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
->>>>>>> Changes camera
     // enter GLUT's main cycle
     glutMainLoop();
 
