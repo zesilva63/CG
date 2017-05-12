@@ -98,16 +98,15 @@ void generate_patch(char* file_in, char* tesselate, char* file_out){
 
 void write_file(Shape* shape, char* file_path){
     char buffer[1024];
-    ofstream file;
     int i, s = shape->size();
     Vertex *v, *n, *t;
 
-    file.open(file_path);
+    ofstream file (file_path, std::ofstream::out);
     for (i = 0; i < s; i++) {
         shape->get_vertex(i, &v, &n, &t);
         sprintf(buffer, "V %f %f %f\n", v->getX(), v->getY(), v->getZ());
-        sprintf(buffer, "N %f %f %f\n", n->getX(), n->getY(), n->getZ());
-        sprintf(buffer, "T %f %f %f\n", t->getX(), t->getY(), t->getZ());
+        sprintf(buffer, "%sN %f %f %f\n", buffer, n->getX(), n->getY(), n->getZ());
+        sprintf(buffer, "%sT %f %f \n", buffer, t->getX(), t->getY());
         file << buffer;
     }
     file.close();

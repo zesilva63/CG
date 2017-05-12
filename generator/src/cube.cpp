@@ -59,7 +59,7 @@ Shape* cube(float x, float y, float z, int n) {
 }
 
 Shape* draw_xy(float x, float y, float z, int n) {
-    Shape *r, *tmp;
+    Shape *r = new Shape(), *tmp;
     float ix, fx, jx; //initial x, final x, jump x
     float iy, fy, jy;
 
@@ -83,7 +83,7 @@ Shape* draw_xy(float x, float y, float z, int n) {
 }
 
 Shape* draw_yz(float x, float y, float z, int n) {
-    Shape *r, *tmp;
+    Shape *r = new Shape(), *tmp;
     float iz, fz, jz; //initial z, final z, jump z
     float iy, fy, jy;
 
@@ -127,120 +127,120 @@ Shape* draw_xz(float x, float y, float z, int n) {
 }
 
 Shape* draw_xy(float x, float jx, float y, float jy, float z) {
-    Shape* r;
+    Shape* r = new Shape();
     int p = z > 0 ? 1 : -1;
     float u, v;
 
     r->push_vertex(new Vertex(x, y, z));
     r->push_normal(new Vertex(0, 0, p));
     convert_xyz_to_cube_uv(x, y, z, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
     r->push_vertex(new Vertex(x+jx, y, z));
     r->push_normal(new Vertex(0, 0, p));
     convert_xyz_to_cube_uv(x+jx, y, z, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
     r->push_vertex(new Vertex(x+jx, y+jy, z));
     r->push_normal(new Vertex(0, 0, p));
     convert_xyz_to_cube_uv(x+jx, y+jy, z, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
 
 
     r->push_vertex(new Vertex(x, y, z));
     r->push_normal(new Vertex(0, 0, p));
     convert_xyz_to_cube_uv(x, y, z, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
     r->push_vertex(new Vertex(x+jx, y+jy, z));
     r->push_normal(new Vertex(0, 0, p));
     convert_xyz_to_cube_uv(x+jx, y+jy, z, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
     r->push_vertex(new Vertex(x, y+jy, z));
     r->push_normal(new Vertex(0, 0, p));
     convert_xyz_to_cube_uv(x, y+jy, z, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
     return r;
 }
 
 Shape* draw_yz(float x, float y, float jy, float z, float jz){
-    Shape* r;
+    Shape* r = new Shape();
     int p = x > 0 ? 1 : -1;
     float u, v;
 
     r->push_vertex(new Vertex(x, y, z+jz));
     r->push_normal(new Vertex(p, 0, 0));
     convert_xyz_to_cube_uv(x, y, z+jz, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
     r->push_vertex(new Vertex(x, y, z));
     r->push_normal(new Vertex(p, 0, 0));
     convert_xyz_to_cube_uv(x, y, z, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
     r->push_vertex(new Vertex(x, y+jy, z+jz));
     r->push_normal(new Vertex(p, 0, 0));
     convert_xyz_to_cube_uv(x, y+jy, z+jz, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
 
 
     r->push_vertex(new Vertex(x, y+jy, z+jz));
     r->push_normal(new Vertex(p, 0, 0));
     convert_xyz_to_cube_uv(x, y+jy, z+jz, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
     r->push_vertex(new Vertex(x, y, z));
     r->push_normal(new Vertex(p, 0, 0));
     convert_xyz_to_cube_uv(x, y, z, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
     r->push_vertex(new Vertex(x, y+jy, z));
     r->push_normal(new Vertex(p, 0, 0));
     convert_xyz_to_cube_uv(x, y+jy, z, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
     return r;
 }
 
 Shape* draw_xz(float x, float jx, float y, float z, float jz){
-    Shape* r;
+    Shape* r = new Shape();
     int p = y > 0 ? 1 : -1;
     float u, v;
 
     r->push_vertex(new Vertex(x, y, z));
     r->push_normal(new Vertex(0, p, 0));
     convert_xyz_to_cube_uv(x, y, z, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
     r->push_vertex(new Vertex(x, y, z+jz));
     r->push_normal(new Vertex(0, p, 0));
     convert_xyz_to_cube_uv(x, y, z+jz, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
     r->push_vertex(new Vertex(x+jx, y, z+jz));
     r->push_normal(new Vertex(0, p, 0));
     convert_xyz_to_cube_uv(x+jx, y, z+jz, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
 
     r->push_vertex(new Vertex(x, y, z));
     r->push_normal(new Vertex(0, p, 0));
     convert_xyz_to_cube_uv(x, y, z, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
     r->push_vertex(new Vertex(x+jx, y, z+jz));
     r->push_normal(new Vertex(0, p, 0));
     convert_xyz_to_cube_uv(x+jx, y, z+jz, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
     r->push_vertex(new Vertex(x+jx, y, z));
     r->push_normal(new Vertex(0, p, 0));
     convert_xyz_to_cube_uv(x+jx, y, z, &u, &v);
-    r->push_texture(new Vertex(u, v, 0));
+    r->push_texture(new Vertex(u, v));
 
     return r;
 }

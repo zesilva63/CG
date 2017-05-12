@@ -35,6 +35,8 @@ Shape::Shape(string file_path) {
                       break;
         }
     }
+
+    ifile.close();
 }
 
 void Shape::get_vertex(int i, Vertex** vertex, Vertex** normal, Vertex** te) {
