@@ -99,12 +99,12 @@ void generate_patch(char* file_in, char* tesselate, char* file_out){
 void write_file(Shape* shape, char* file_path){
     char buffer[1024];
     ofstream file;
-    int i, n = shape.size();
+    int i, s = shape->size();
     Vertex *v, *n, *t;
 
     file.open(file_path);
-    for (i = 0; i < n; i++) {
-        shape.getVertex(i, &v, &n, &t);
+    for (i = 0; i < s; i++) {
+        shape->get_vertex(i, &v, &n, &t);
         sprintf(buffer, "V %f %f %f\n", v->getX(), v->getY(), v->getZ());
         sprintf(buffer, "N %f %f %f\n", n->getX(), n->getY(), n->getZ());
         sprintf(buffer, "T %f %f %f\n", t->getX(), t->getY(), t->getZ());

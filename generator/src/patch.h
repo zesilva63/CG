@@ -14,6 +14,6 @@ Generates an list of surfaces from a given patch
 @param tesselate, number of precision to make the bezier surface
 @returns a vector with all the vertices of generated surfaces
 */
-Shape* patch(char *file, int tesselate);
+std::vector<Vertex*> patch(char *file, int tesselate);
 
 #endif
