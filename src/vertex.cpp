@@ -20,10 +20,12 @@ Vertex::Vertex(std::string str) {
         x = std::stof (str, &sz);
         str.erase(0, sz+1);
         y = std::stof (str, &sz);
-        str.erase(0, sz+1);
-        z = std::stof (str, &sz);
+        if (str.length() > 0) {
+            str.erase(0, sz+1);
+            z = std::stof (str, &sz);
+        }
     } catch ( ... ) {
-        throw std::invalid_argument ("The string must have 3 float numbers separated by a space");
+        throw std::invalid_argument ("The string must have 2 or 3 float numbers separated by a space");
     }
 }
 
