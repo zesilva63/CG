@@ -53,12 +53,10 @@ void Camera::mouse_button(int button, int state, int x, int y) {
 
 void Camera::mouse_move(int x, int y) {
     if (xOrigin >= 0) {
-        printf("DISTANCE: %d DELTA: %f\n", x - xOrigin, (x-xOrigin) * 0.001f);
         deltaX = (x - xOrigin) * 0.001f;
 
-        printf("LZ: %f DZ: %f ANGLE: %f\n", lz, dz, angle + deltaX);
-        lx = dx * sin(angle + deltaX);
-        lz = - dz * cos(angle + deltaX);
+        lx = px + sin(angle + deltaX);
+        lz = pz + cos(angle + deltaX);
         printf("LZ: %f\n", lz);
 
         update_direction();
@@ -76,8 +74,6 @@ void Camera::update(float *v, int s) {
 void Camera::move_to_camera(bool backwards) {
     int direction = (backwards) ? -1 : 1;
 
-    printf("%f %f %f\n", px, lx, dx);
-    printf("%f %f %f\n", pz, lz, dz);
     px += direction * dx * SPEED;
     pz += direction * dz * SPEED;
 
