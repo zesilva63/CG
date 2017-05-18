@@ -69,13 +69,13 @@ Shape* sphere(double radius, int verticalLayers, int horizontalLayers) {
             points->push_texture(new Vertex(u, v));
 
             points->push_vertex(new Vertex(x4, y4, z4));
-            normal = Vertex::normalize(new Vertex(x4, y4, z4));
+            normal = Vertex::normalize(new Vertex(x2, y2, z2));
             points->push_normal(normal);
             xyz_to_uv(x4, y4, z4, &u, &v);
             points->push_texture(new Vertex(u, v));
 
             points->push_vertex(new Vertex(x2, y2, z2));
-            normal = Vertex::normalize(new Vertex(x2, y2, z2));
+            normal = Vertex::normalize(new Vertex(x4, y4, z4));
             points->push_normal(normal);
             xyz_to_uv(x2, y2, z2, &u, &v);
             points->push_texture(new Vertex(u, v));
