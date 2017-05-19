@@ -13,7 +13,8 @@ Shape* draw_xz(float x, float jx, float y, float z, float jz);
 void convert_xyz_to_cube_uv(float x, float y, float z, float *u, float *v);
 
 Shape* cube(float x, float y, float z, int n) {
-    Shape *r, *tmp;
+    Shape *r = new Shape();
+    Shape *tmp = new Shape();
 
 /*
     "<-" points to hidden faces

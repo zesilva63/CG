@@ -1,0 +1,12 @@
+<scene>
+	<group>
+		<scale X="0.2" Y="0.3" Z="0.3" />
+		<translate Z="2"/>
+		<group name="maindeck">
+			<scale X="1" Y="0.5" Z="0.5" />
+			<models>
+				<model file="3d/out" texture="wood.jpg" />
+			</models>
+		</group>
+	</group>
+</scene>

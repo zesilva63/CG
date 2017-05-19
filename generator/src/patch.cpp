@@ -19,23 +19,32 @@ int *patches;
 int patches_size;
 vector<Vertex*> points;
 vector<Vertex*> final;
+Shape * fig;
 
 void patchBezier(int tesselate);
 Vertex* calcular(float t, float *p1, float *p2, float *p3, float *p4);
 Vertex* bezier(float u, float v, int p);
+void xyz_to_uv(int patchN, int p, float x, float y, float inc, float* u, float* v);
 
-vector<Vertex*> patch(char * file,int n) {
+Shape *patch(char * file,int n) {
 	string line;
 	ifstream ifile(file);
 	int j = 0;
+	fig = new Shape();
+
 
 	if (ifile.fail())
     	throw std::ios_base::failure(string("Couldn't find file: ") + file);
 
 	getline(ifile,line);
 
+	//calcular tamanho da cena
 	patches_size = stoi(line);
 	patches = (int *) malloc (sizeof(int)*patches_size*16);
+
+	//fim
+
+
 
 	for(int i = 0; i!=patches_size; i++){
 		getline(ifile,line);
@@ -47,7 +56,9 @@ vector<Vertex*> patch(char * file,int n) {
 		for(auto& s: tokens)
         	patches[j++] = stoi(s) ;
 	}
+
 	getline(ifile,line);
+	
 	while(getline(ifile,line)){
 		try {
 			Vertex *v = new Vertex(line);
@@ -61,12 +72,13 @@ vector<Vertex*> patch(char * file,int n) {
 	patchBezier(n);
 	free(patches);
 
-	return final;
+	return fig;
 }
 
 void patchBezier(int tesselate) {
-	float inc = 1.0 / tesselate, u, v, u2, v2;
+	float inc = 1.0 / tesselate, u, v, u2, v2, uT, vT;
 	int patchN;
+	Vertex *normal;
 
 	for(int w=0;w!= patches_size;w++){
 		patchN = w * 16;
@@ -82,13 +94,43 @@ void patchBezier(int tesselate) {
 				Vertex* p2 = bezier(u2, v , patchN);
 				Vertex* p3 = bezier(u2, v2, patchN);
 
-				final.push_back(p0);
-				final.push_back(p2);
-				final.push_back(p3);
+				fig->push_vertex(p0);
+				normal = Vertex::normalize(new Vertex(p0->getX(), p0->getY(), p0->getZ()));
+            	fig->push_normal(normal);
+            	xyz_to_uv(w, 0, u, v, inc, &uT, &vT);
+            	fig->push_texture(new Vertex(uT, vT));
+				
+				fig->push_vertex(p2);
+				normal = Vertex::normalize(new Vertex(p2->getX(), p2->getY(), p2->getZ()));
+            	fig->push_normal(normal);
+            	xyz_to_uv(w, 2, u, v, inc, &uT, &vT);
+            	fig->push_texture(new Vertex(uT, vT));
+				
+				fig->push_vertex(p3);
+				normal = Vertex::normalize(new Vertex(p3->getX(), p3->getY(), p3->getZ()));
+            	fig->push_normal(normal);
+				xyz_to_uv(w, 3, u, v, inc, &uT, &vT);
+            	fig->push_texture(new Vertex(uT, vT));
 
-				final.push_back(p0);
-				final.push_back(p3);
-				final.push_back(p1);
+
+				fig->push_vertex(p0);
+				normal = Vertex::normalize(new Vertex(p0->getX(), p0->getY(), p0->getZ()));
+            	fig->push_normal(normal);
+            	xyz_to_uv(w, 0, u, v, inc, &uT, &vT);
+            	fig->push_texture(new Vertex(uT, vT));
+				
+				fig->push_vertex(p3);
+				normal = Vertex::normalize(new Vertex(p3->getX(), p3->getY(), p3->getZ()));
+            	fig->push_normal(normal);
+            	xyz_to_uv(w, 3, u, v, inc, &uT, &vT);
+            	fig->push_texture(new Vertex(uT, vT));
+				
+				fig->push_vertex(p1);
+				normal = Vertex::normalize(new Vertex(p1->getX(), p1->getY(), p1->getZ()));
+            	fig->push_normal(normal);
+            	xyz_to_uv(w, 1, u, v, inc, &uT, &vT);
+            	fig->push_texture(new Vertex(uT, vT));
+				
 			}
 		}
 	}
@@ -132,4 +174,25 @@ Vertex* calcular(float t, float *p1, float *p2, float *p3, float *p4) {
 	res[2] = b0*p1[2] + b1*p2[2] + b2*p3[2] + b3*p4[2];
 
 	return (new Vertex(res[0], res[1], res[2]));
+}
+
+void xyz_to_uv(int patchN, int p, float x, float y, float inc, float* u, float* v){
+	switch (p){
+		case 0: 
+			*u = float(patchN + x)/float(patches_size);
+			*v = y;
+			break;
+		case 1: 
+			*u = float(patchN + x + inc)/float(patches_size);
+			*v = y;
+			break;
+		case 2: 
+			*u = float(patchN + x)/float(patches_size);
+			*v = y + inc;
+			break;
+		case 3: 
+			*u = float(patchN + x + inc)/float(patches_size);
+			*v = y + inc;
+			break;
+	}
 }
