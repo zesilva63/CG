@@ -7,7 +7,7 @@
 		<group>
 			<scale X="5" Y="5" Z="5" />
 			<models>
-                <model file="3d/sphere.3d" texture="tex/sun.jpg" diffR="0.7" diffG="0.5" diffB="0.2"/>
+                <model file="3d/sphere.3d" texture="tex/sun.jpg" emiR="0.9" emiG="0.6" emiB="0.2" shine="100"/>
 			</models>
 		</group>
 		<!-- Mercurio -->
@@ -16,7 +16,7 @@
             <translate X="0" Y="0" Z="7"/>
 			<scale X="0.235" Y="0.235" Z="0.235" />
 			<models>
-				<model file="3d/sphere.3d" R="150" G="150" B="150" />
+                <model file="3d/sphere.3d" texture="tex/mercury.jpg"/>
 			</models>
 		</group>
 		<!-- Venus -->
@@ -25,7 +25,7 @@
             <translate X="0" Y="0" Z="11"/>
 			<scale X="0.586" Y="0.586" Z="0.586" />
 			<models>
-				<model file="3d/sphere.3d" R="250" G="70" B="50" />
+                <model file="3d/sphere.3d" texture="tex/venus.jpg" />
 			</models>
 		</group>
 		<!-- Terra -->
@@ -34,7 +34,7 @@
             <translate X="0" Y="0" Z="15" />
 			<scale X="0.591" Y="0.591" Z="0.591" />
 			<models>
-                <model file="3d/sphere.3d" texture="tex/earth.tif"/>
+                <model file="3d/sphere.3d" texture="tex/earth.jpg"/>
 			</models>
 			<!-- Lua -->
 			<group>
@@ -52,7 +52,7 @@
             <translate X="0" Y="0" Z="20"/>
 			<scale X="0.3" Y="0.3" Z="0.3" />
 			<models>
-				<model file="3d/sphere.3d" R="240" G="50" B="30" />
+                <model file="3d/sphere.3d" texture="tex/mars.jpg" />
 			</models>
 		</group>
 		<!-- Jupiter -->
@@ -61,7 +61,7 @@
             <translate X="0" Y="0" Z="33"/>
 			<scale X="1.5" Y="1.5" Z="1.5" />
 			<models>
-				<model file="3d/sphere.3d" R="250" G="200" B="203" />
+                <model file="3d/sphere.3d" texture="tex/jupiter.jpg" />
 			</models>
 			<!-- Io -->
 			<group>
@@ -106,7 +106,7 @@
             <translate X="0" Y="0" Z="43"/>
 			<scale X="1.2" Y="1.2" Z="1.2" />
 			<models>
-				<model file="3d/sphere.3d" R="240" G="230" B="180" />
+                <model file="3d/sphere.3d" texture="saturn.jpg"/>
 			</models>
 			<!-- Titã -->
 			<group>
@@ -124,7 +124,7 @@
             <translate X="0" Y="0" Z="49" />
 			<scale X="0.86" Y="0.86" Z="0.86" />
 			<models>
-				<model file="3d/sphere.3d" R="60" G="40" B="200" />
+                <model file="3d/sphere.3d" texture="tex/uranus.jpg"/>
 			</models>
 		</group>
 		<!-- Neptuno -->
@@ -133,7 +133,7 @@
             <translate X="0" Y="0" Z="55"/>
 			<scale X="0.85" Y="0.85" Z="0.85" />
 			<models>
-				<model file="3d/sphere.3d" R="60" G="40" B="250" />
+                <model file="3d/sphere.3d" texture="tex/neptune.jpg" />
 			</models>
 			<!-- Tritão -->
 			<group>

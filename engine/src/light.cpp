@@ -14,5 +14,10 @@ void Light::parse(XMLElement* model) {
 }
 
 void Light::render() {
+    GLfloat amb[4] = {0.2, 0.2, 0.2, 1.0};
+    GLfloat diff[4] = {1.0, 1.0, 1.0, 1.0};
+
     glLightfv(GL_LIGHT0, GL_POSITION, pos);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
 }

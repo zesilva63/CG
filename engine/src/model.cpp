@@ -19,50 +19,35 @@ Model::Model() {
     normals = 0;
     texture = 0;
     tex_points = 0;
-    color[3] = 1.0f;
+    shininess = 0;
 }
 
-bool Model::parse_diffuse(XMLElement* model) {
-    XMLError r1 = model->QueryFloatAttribute("diffR", &color[0]);
-    XMLError r2 = model->QueryFloatAttribute("diffG", &color[1]);
-    XMLError r3 = model->QueryFloatAttribute("diffB", &color[2]);
+void Model::parse_light(XMLElement* model) {
+    model->QueryFloatAttribute("diffR", &diffuse[0]);
+    model->QueryFloatAttribute("diffG", &diffuse[1]);
+    model->QueryFloatAttribute("diffB", &diffuse[2]);
 
-    light_type = GL_DIFFUSE;
-    return !r1 && !r2 && !r3;
+    model->QueryFloatAttribute("specR", &specular[0]);
+    model->QueryFloatAttribute("specG", &specular[1]);
+    model->QueryFloatAttribute("specB", &specular[2]);
+
+    model->QueryFloatAttribute("emiR", &emission[0]);
+    model->QueryFloatAttribute("emiG", &emission[1]);
+    model->QueryFloatAttribute("emiB", &emission[2]);
+
+    model->QueryFloatAttribute("ambR", &ambient[0]);
+    model->QueryFloatAttribute("ambG", &ambient[1]);
+    model->QueryFloatAttribute("ambB", &ambient[2]);
+
+    model->QueryFloatAttribute("shine", &shininess);
 }
 
-bool Model::parse_specular(XMLElement* model) {
-    XMLError r1 = model->QueryFloatAttribute("specR", &color[0]);
-    XMLError r2 = model->QueryFloatAttribute("specG", &color[1]);
-    XMLError r3 = model->QueryFloatAttribute("specB", &color[2]);
-
-    light_type = GL_SPECULAR;
-    return !r1 && !r2 && !r3;
-}
-
-bool Model::parse_emission(XMLElement* model) {
-    XMLError r1 = model->QueryFloatAttribute("emiR", &color[0]);
-    XMLError r2 = model->QueryFloatAttribute("emiG", &color[1]);
-    XMLError r3 = model->QueryFloatAttribute("emiB", &color[2]);
-
-    light_type = GL_EMISSION;
-    return !r1 && !r2 && !r3;
-}
-
-bool Model::parse_ambient(XMLElement* model) {
-    XMLError r1 = model->QueryFloatAttribute("ambR", &color[0]);
-    XMLError r2 = model->QueryFloatAttribute("ambG", &color[1]);
-    XMLError r3 = model->QueryFloatAttribute("ambB", &color[2]);
-
-    light_type = GL_AMBIENT;
-    return !r1 && !r2 && !r3;
-}
-
-bool Model::parse_light(XMLElement* model) {
-    return parse_diffuse(model)  ||
-           parse_specular(model) ||
-           parse_emission(model) ||
-           parse_ambient(model);
+void Model::render_light() {
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shininess);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission);
 }
 
 void Model::parse(string directory, XMLElement* model) {
@@ -114,15 +99,16 @@ void Model::load_texture(const char* tex_file) {
 
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D,texture);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
 }
 
 void Model::render() {
-    glMaterialfv(GL_FRONT, light_type, color);
+    render_light();
     glBindTexture(GL_TEXTURE_2D, texture);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
@@ -136,6 +122,8 @@ void Model::render() {
 
     glDrawArrays(GL_TRIANGLES, 0, vertices / 3);
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    glFlush();
 }
 
 void Group::render() {

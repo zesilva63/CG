@@ -48,9 +48,7 @@ void renderscene(void) {
     glLoadIdentity();
     glTranslatef(0.0f, -0.6f, -3);
 
-    /* glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); */
-    /* ship.render(); */
-    /* glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); */
+    ship.render();
 
     glRotatef(180,1.0,0.0,0.0);
     glTranslatef(0.0f, 00.f, 30);
@@ -79,12 +77,6 @@ int main(int argc, char **argv) {
     glutInitWindowPosition(100,100);
     glutInitWindowSize(800,800);
     glutCreateWindow("Engine");
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glewInit();
 
     // required callback registry
@@ -103,6 +95,13 @@ int main(int argc, char **argv) {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_TEXTURE_2D);
 
     try {
         switch(argc) {
@@ -117,7 +116,6 @@ int main(int argc, char **argv) {
         std::cerr << "ERROR: " << e.what() << std::endl;
         return 2;
     }
-
 
     // enter GLUT's main cycle
     glutMainLoop();

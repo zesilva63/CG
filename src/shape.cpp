@@ -93,7 +93,7 @@ vector<float> *Shape::get_normals() {
 vector<float> *Shape::get_texture() {
     vector<float> *vec = new vector<float>();
 
-    for (Vertex *v: normals) {
+    for (Vertex *v: texture) {
         vec->push_back(v->getX());
         vec->push_back(v->getY());
     }
