@@ -24,8 +24,8 @@ class Model {
         float emission[4] = {0, 0, 0, 1};
         float shininess;
         GLenum light_type;
-        void parse_light(tinyxml2::XMLElement *model);
-        void render_light();
+        void parse_material(tinyxml2::XMLElement *model);
+        void render_material();
         void parse_texture(std::string directory, tinyxml2::XMLElement* model);
         void load_texture(const char* tex_file);
 };

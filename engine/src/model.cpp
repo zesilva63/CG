@@ -10,7 +10,6 @@ using std::ifstream;
 using std::getline;
 using std::exception;
 using tinyxml2::XMLElement;
-using tinyxml2::XMLError;
 
 using std::vector;
 
@@ -22,7 +21,7 @@ Model::Model() {
     shininess = 0;
 }
 
-void Model::parse_light(XMLElement* model) {
+void Model::parse_material(XMLElement* model) {
     model->QueryFloatAttribute("diffR", &diffuse[0]);
     model->QueryFloatAttribute("diffG", &diffuse[1]);
     model->QueryFloatAttribute("diffB", &diffuse[2]);
@@ -42,7 +41,7 @@ void Model::parse_light(XMLElement* model) {
     model->QueryFloatAttribute("shine", &shininess);
 }
 
-void Model::render_light() {
+void Model::render_material() {
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shininess);
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
@@ -56,7 +55,7 @@ void Model::parse(string directory, XMLElement* model) {
     Shape s;
 
     parse_texture(directory, model);
-    parse_light(model);
+    parse_material(model);
     s.load_file(directory + filename);
     glGenBuffers(3, buffers);
 
@@ -98,7 +97,7 @@ void Model::load_texture(const char* tex_file) {
     texData = ilGetData();
 
     glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D,texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -108,7 +107,7 @@ void Model::load_texture(const char* tex_file) {
 }
 
 void Model::render() {
-    render_light();
+    render_material();
     glBindTexture(GL_TEXTURE_2D, texture);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
@@ -122,8 +121,6 @@ void Model::render() {
 
     glDrawArrays(GL_TRIANGLES, 0, vertices / 3);
     glBindTexture(GL_TEXTURE_2D, 0);
-
-    glFlush();
 }
 
 void Group::render() {
