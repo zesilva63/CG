@@ -2,8 +2,8 @@
 #include <GL/glut.h>
 #include <fstream>
 #include <exception>
-#include <iostream>
 #include "model.h"
+#include <IL/il.h>
 
 using std::string;
 using std::ifstream;
@@ -11,56 +11,116 @@ using std::getline;
 using std::exception;
 using tinyxml2::XMLElement;
 
-void Model::setColor(XMLElement* model) {
-    int cred = 255, cgreen = 255, cblue = 255;
+using std::vector;
 
-    model->QueryIntAttribute("R", &cred);
-    model->QueryIntAttribute("G", &cgreen);
-    model->QueryIntAttribute("B", &cblue);
+Model::Model() {
+    vertices = 0;
+    normals = 0;
+    texture = 0;
+    tex_points = 0;
+    shininess = 0;
+}
 
-    red = (double) cred / 255;
-    green = (double) cgreen / 255;
-    blue = (double) cblue / 255;
+void Model::parse_material(XMLElement* model) {
+    model->QueryFloatAttribute("diffR", &diffuse[0]);
+    model->QueryFloatAttribute("diffG", &diffuse[1]);
+    model->QueryFloatAttribute("diffB", &diffuse[2]);
+
+    model->QueryFloatAttribute("specR", &specular[0]);
+    model->QueryFloatAttribute("specG", &specular[1]);
+    model->QueryFloatAttribute("specB", &specular[2]);
+
+    model->QueryFloatAttribute("emiR", &emission[0]);
+    model->QueryFloatAttribute("emiG", &emission[1]);
+    model->QueryFloatAttribute("emiB", &emission[2]);
+
+    model->QueryFloatAttribute("ambR", &ambient[0]);
+    model->QueryFloatAttribute("ambG", &ambient[1]);
+    model->QueryFloatAttribute("ambB", &ambient[2]);
+
+    model->QueryFloatAttribute("shine", &shininess);
+}
+
+void Model::render_material() {
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shininess);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission);
 }
 
 void Model::parse(string directory, XMLElement* model) {
-    string line, filename = string( model->Attribute("file") );
-    int size;
+    string line, filename = string(model->Attribute("file"));
+    vector<float> *vec;
+    Shape s;
 
-    setColor(model);
+    parse_texture(directory, model);
+    parse_material(model);
+    s.load_file(directory + filename);
+    glGenBuffers(3, buffers);
 
-    ifstream ifile((directory + filename).c_str());
-    if (ifile.fail())
-        throw std::ios_base::failure(string("Couldn't find file: ") + filename);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+    vec = s.get_vertices();
+    vertices = vec->size();
+    glBufferData(GL_ARRAY_BUFFER, vertices*sizeof(float), vec->data(), GL_STATIC_DRAW);
 
-    while(getline(ifile, line)) {
-        try {
-            Vertex *v = new Vertex(line);
-            vertices.push_back(v->getX());
-            vertices.push_back(v->getY());
-            vertices.push_back(v->getZ());
-        } catch (exception& e) {
-            throw std::invalid_argument(
-              std::string("Couldn't parse file ") + filename + ": " + e.what());
-        }
-    }
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+    vec = s.get_normals();
+    normals = vec->size();
+    glBufferData(GL_ARRAY_BUFFER, normals*sizeof(float), vec->data(), GL_STATIC_DRAW);
 
-    glGenBuffers(1, &buffers);
-    glBindBuffer(GL_ARRAY_BUFFER, buffers);
+    glBindTexture(GL_ARRAY_BUFFER, buffers[2]);
+    vec = s.get_texture();
+    tex_points = vec->size();
+    glBufferData(GL_ARRAY_BUFFER, tex_points*sizeof(float), vec->data(), GL_STATIC_DRAW);
+}
 
-    size = vertices.size() * sizeof(float);
-    glBufferData(GL_ARRAY_BUFFER, size, vertices.data(), GL_STATIC_DRAW);
+void Model::parse_texture(string directory, XMLElement* model) {
+    const char *filename = model->Attribute("texture");
+
+    if (filename == NULL)
+        return;
+
+    load_texture((directory + string(filename)).c_str());
+}
+
+void Model::load_texture(const char* tex_file) {
+    unsigned int t,tw,th;
+    unsigned char *texData;
+    ilGenImages(1,&t);
+    ilBindImage(t);
+    ilLoadImage((ILstring) tex_file);
+
+    tw = ilGetInteger(IL_IMAGE_WIDTH);
+    th = ilGetInteger(IL_IMAGE_HEIGHT);
+    ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+    texData = ilGetData();
+
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
 }
 
 void Model::render() {
-    int size = vertices.size() * sizeof(float);
+    render_material();
+    glBindTexture(GL_TEXTURE_2D, texture);
 
-    glColor3f(red, green, blue);
-    glBindBuffer(GL_ARRAY_BUFFER, buffers);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
     glVertexPointer(3, GL_FLOAT, 0, 0);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, size / 3);
 
-    glColor3f(1, 1, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+    glNormalPointer(GL_FLOAT, 0, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+    glTexCoordPointer(2, GL_FLOAT, 0, 0);
+
+    glDrawArrays(GL_TRIANGLES, 0, vertices / 3);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Group::render() {

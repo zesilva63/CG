@@ -7,17 +7,27 @@
 #include "translate.h"
 #include "rotate.h"
 #include "../../src/vertex.h"
+#include "../../src/shape.h"
 
 class Model {
     public:
+        Model();
         void parse(std::string directory, tinyxml2::XMLElement *model);
         void render();
 
     private:
-        GLuint buffers;
-        std::vector<float> vertices;
-        double red, green, blue;
-        void setColor(tinyxml2::XMLElement *model);
+        int vertices, normals, tex_points;
+        GLuint texture, buffers[3];
+        float ambient[4] = {0.2, 0.2, 0.2, 1};
+        float diffuse[4] = {0.8, 0.8, 0.8, 1};
+        float specular[4] = {0, 0, 0, 1};
+        float emission[4] = {0, 0, 0, 1};
+        float shininess;
+        GLenum light_type;
+        void parse_material(tinyxml2::XMLElement *model);
+        void render_material();
+        void parse_texture(std::string directory, tinyxml2::XMLElement* model);
+        void load_texture(const char* tex_file);
 };
 
 class Group {
