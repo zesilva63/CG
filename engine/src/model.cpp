@@ -70,7 +70,7 @@ void Model::parse(string directory, XMLElement* model) {
     vector<float> *vec;
     Shape s;
 
-    /* parse_texture(directory, model); */
+    parse_texture(directory, model);
     parse_light(model);
     s.load_file(directory + filename);
     glGenBuffers(3, buffers);
@@ -122,7 +122,7 @@ void Model::load_texture(const char* tex_file) {
 }
 
 void Model::render() {
-    /* glMaterialfv(GL_FRONT, light_type, color); */
+    glMaterialfv(GL_FRONT, light_type, color);
     glBindTexture(GL_TEXTURE_2D, texture);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
