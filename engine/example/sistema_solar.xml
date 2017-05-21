@@ -145,21 +145,21 @@
 				</models>
 			</group>
 		</group>
-	<!-- </group> -->
+	</group>
     <!-- Cometa -->
-        <!-- <group> -->
-        <!-- <group> -->
-        <!--     <translate time="8" > -->
-        <!--         <point X="0"   Y="0" Z="-15" /> -->
-        <!--         <point X="10"  Y="0" Z="5" /> -->
-        <!--         <point X="0"   Y="0" Z="90" /> -->
-        <!--         <point X="-15" Y="0" Z="5" /> -->
-        <!--     </translate> -->
-        <!--     <rotate angle="45" X="0" Y="1" Z="0"/> -->
-        <!--     <scale X="0.1" Y="0.1" Z="0.1" /> -->
-        <!--     <models> -->
-        <!--         <model file="3d/teapot.3d" R="150" G="150" B="255" /> -->
-        <!--     </models> -->
-        <!-- </group> -->
+        <group>
+        <group>
+            <translate time="8" >
+                <point X="0"   Y="0" Z="-15" />
+                <point X="10"  Y="0" Z="5" />
+                <point X="0"   Y="0" Z="90" />
+                <point X="-15" Y="0" Z="5" />
+            </translate>
+            <rotate angle="45" X="0" Y="1" Z="0"/>
+            <scale X="0.1" Y="0.1" Z="0.1" />
+            <models>
+                <model file="3d/teapot.3d" R="150" G="150" B="255" />
+            </models>
+        </group>
     </group>
 </scene>

@@ -18,7 +18,7 @@ void generate_plane(char* size, char* file_path);
 void generate_cube(char* x, char* y, char* z, char* n, char* file_path);
 //void generate_cone(char* radious, char* height, char* stacks, char* slices, char* file_path);
 void generate_sphere(char* radious, char* verticalLayers, char* horizontalLayers, char* file_path);
-//void generate_patch(char* file_in, char* tesselate, char* file_out);
+void generate_patch(char* file_in, char* tesselate, char* file_out);
 void write_file(Shape* v, char* file_path);
 
 int main (int argc, char** argv) {
@@ -32,8 +32,8 @@ int main (int argc, char** argv) {
         generate_cone(argv[2], argv[3], argv[4], argv[5], argv[6]); */
     else if(!strcmp(argv[1], "sphere") && argc == 6)
         generate_sphere(argv[2], argv[3], argv[4], argv[5]);
-/*    else if(!strcmp(argv[1], "patch") && argc == 5)
-        generate_patch(argv[2], argv[3], argv[4]); */
+    else if(!strcmp(argv[1], "patch") && argc == 5)
+        generate_patch(argv[2], argv[3], argv[4]); 
     else print_usage();
 
     return 0;
@@ -85,7 +85,7 @@ void generate_sphere(char* radious, char* verticalLayers, char* horizontalLayers
     Shape* shape = sphere(r,vL,hL);
     write_file(shape, file_path);
 }
-/*
+
 void generate_patch(char* file_in, char* tesselate, char* file_out){
     int n;
 
@@ -94,7 +94,7 @@ void generate_patch(char* file_in, char* tesselate, char* file_out){
     Shape* shape = patch(file_in,n);
     write_file(shape, file_out);
 }
-*/
+
 
 void write_file(Shape* shape, char* file_path){
     char buffer[1024];
