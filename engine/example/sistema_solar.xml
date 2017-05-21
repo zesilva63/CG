@@ -1,13 +1,13 @@
 <scene>
     <lights>
-        <light type="POINT" posX="0" posY="0" posZ="0" />
+        <light type="POINT" posX="0" posY="10" posZ="0" />
     </lights>
 	<group>
 		<!-- Sol -->
 		<group>
 			<scale X="5" Y="5" Z="5" />
 			<models>
-                <model file="3d/sphere.3d" texture="tex/sun.jpg" emiR="0.9" emiG="0.6" emiB="0.2" shine="100"/>
+                <model file="3d/sphere.3d" ambR="0.8" ambG="0.8" ambB="0.15" shine="100"/>
 			</models>
 		</group>
 		<!-- Mercurio -->

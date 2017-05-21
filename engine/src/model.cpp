@@ -55,7 +55,7 @@ void Model::parse(string directory, XMLElement* model) {
     vector<float> *vec;
     Shape s;
 
-    //parse_texture(directory, model);
+    parse_texture(directory, model);
     parse_material(model);
     s.load_file(directory + filename);
     glGenBuffers(3, buffers);
@@ -143,8 +143,7 @@ void Model::render() {
 void Group::render() {
     
     glPushMatrix();
-    glClear(GL_COLOR_BUFFER_BIT);
-
+    
     for(Operation *op: ops)
         op->apply();
 
