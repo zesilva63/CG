@@ -87,7 +87,6 @@ void Model::parse_texture(string directory, XMLElement* model) {
 
 
 void Model::load_texture(std::string s) {
-
     unsigned int t,tw,th;
     unsigned char *texData;
     unsigned int texID;
@@ -116,9 +115,7 @@ void Model::load_texture(std::string s) {
     glGenerateMipmap(GL_TEXTURE_2D);
 
     glBindTexture(GL_TEXTURE_2D, 0);
-
     this->texture = texID;
-
 }
 
 
@@ -136,7 +133,7 @@ void Model::render() {
     glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
     glTexCoordPointer(2, GL_FLOAT, 0, 0);
 
-    glDrawArrays(GL_TRIANGLES, 0, vertices / 3);
+    glDrawArrays(GL_TRIANGLES, 0, vertices);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 

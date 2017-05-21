@@ -95,13 +95,14 @@ int main(int argc, char **argv) {
     glEnable(GL_CULL_FACE);
     glEnable(GL_TEXTURE_2D);
     glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
+
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
 
     GLfloat amb[4]  = {0.2, 0.2, 0.2, 1.0};
     GLfloat diff[4] = {0.8, 0.8, 0.8, 1.0};
