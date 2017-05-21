@@ -7,6 +7,12 @@ Vertex::Vertex(float nx, float ny, float nz) {
     z = nz;
 }
 
+Vertex::Vertex(float u, float v) {
+    x = u;
+    y = v;
+    z = 0;
+}
+
 Vertex::Vertex(std::string str) {
     size_t sz;
 

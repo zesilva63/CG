@@ -1,0 +1,14 @@
+<scene>
+    <lights>
+        <light type="POINT" posX="10" posY="-10" posZ="10" />
+    </lights>
+	<group>
+		<!-- Sol -->
+		<group>
+			<scale X="5" Y="5" Z="5" />
+			<models>
+                <model file="plane.3d" texture="mars.jpg"/>
+			</models>
+		</group>
+	</group>
+</scene>
