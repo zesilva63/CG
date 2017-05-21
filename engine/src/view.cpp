@@ -20,8 +20,9 @@ void View::render() {
 
 void View::render_lights() {
     for(Light *l: lights)
-        l->render();
+        l->definePos();
 }
+
 
 void View::parse(string filename) {
     XMLDocument doc;
@@ -37,6 +38,9 @@ void View::parse(string filename) {
         if (!strcmp(node->Value(), "group")) {
             Group *grp = parse_group(node);
             groups.push_back(grp);
+        }
+        if (!strcmp(node->Value(), "lights")) {
+            parse_lights(node);
         }
     }
 }

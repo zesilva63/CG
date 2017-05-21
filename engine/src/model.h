@@ -27,7 +27,7 @@ class Model {
         void parse_material(tinyxml2::XMLElement *model);
         void render_material();
         void parse_texture(std::string directory, tinyxml2::XMLElement* model);
-        void load_texture(const char* tex_file);
+        void load_texture(std::string s);
 };
 
 class Group {

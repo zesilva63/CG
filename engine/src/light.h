@@ -6,7 +6,7 @@
 class Light {
     public:
         void parse(tinyxml2::XMLElement *model);
-        void render();
+        void definePos();
 
     private:
         float pos[4];

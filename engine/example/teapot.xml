@@ -5,7 +5,7 @@
 		<group name="maindeck">
 			<scale X="1" Y="0.5" Z="0.5" />
 			<models>
-				<model file="3d/out" texture="wood.jpg" />
+				<model file="3d/sphere.3d" />
 			</models>
 		</group>
 	</group>

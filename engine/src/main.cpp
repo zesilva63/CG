@@ -57,7 +57,6 @@ void renderscene(void) {
     glRotatef(c.getYRot(),0.0,1.0,0.0);
     glTranslated(-c.getXPos(),-c.getYPos(),-c.getZPos());
 
-    scene.render_lights();
     scene.render();
 
     // End of frame
@@ -95,12 +94,24 @@ int main(int argc, char **argv) {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glEnable(GL_TEXTURE_2D);
+    glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+
+    GLfloat amb[4]  = {0.2, 0.2, 0.2, 1.0};
+    GLfloat diff[4] = {0.8, 0.8, 0.8, 1.0};
+    GLfloat spec[4] = {1.0, 1.0, 1.0, 1.0};
+    
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, spec);
+    
 
     try {
         switch(argc) {
@@ -115,6 +126,7 @@ int main(int argc, char **argv) {
         std::cerr << "ERROR: " << e.what() << std::endl;
         return 2;
     }
+    scene.render_lights();
 
     // enter GLUT's main cycle
     glutMainLoop();

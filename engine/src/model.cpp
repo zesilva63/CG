@@ -47,6 +47,7 @@ void Model::render_material() {
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
     glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission);
+
 }
 
 void Model::parse(string directory, XMLElement* model) {
@@ -54,7 +55,7 @@ void Model::parse(string directory, XMLElement* model) {
     vector<float> *vec;
     Shape s;
 
-    parse_texture(directory, model);
+    //parse_texture(directory, model);
     parse_material(model);
     s.load_file(directory + filename);
     glGenBuffers(3, buffers);
@@ -84,27 +85,43 @@ void Model::parse_texture(string directory, XMLElement* model) {
     load_texture((directory + string(filename)).c_str());
 }
 
-void Model::load_texture(const char* tex_file) {
+
+void Model::load_texture(std::string s) {
+
     unsigned int t,tw,th;
     unsigned char *texData;
+    unsigned int texID;
+
+    ilInit();
+    ilEnable(IL_ORIGIN_SET);
+    ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
     ilGenImages(1,&t);
     ilBindImage(t);
-    ilLoadImage((ILstring) tex_file);
-
+    ilLoadImage((ILstring)s.c_str());
     tw = ilGetInteger(IL_IMAGE_WIDTH);
     th = ilGetInteger(IL_IMAGE_HEIGHT);
     ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
     texData = ilGetData();
 
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glGenTextures(1,&texID);
+    
+    glBindTexture(GL_TEXTURE_2D,texID);
+    glTexParameteri(GL_TEXTURE_2D,  GL_TEXTURE_WRAP_S,      GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,  GL_TEXTURE_WRAP_T,      GL_REPEAT);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,  GL_TEXTURE_MAG_FILTER,      GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,  GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    this->texture = texID;
+
 }
+
+
 
 void Model::render() {
     render_material();
@@ -124,7 +141,9 @@ void Model::render() {
 }
 
 void Group::render() {
+    
     glPushMatrix();
+    glClear(GL_COLOR_BUFFER_BIT);
 
     for(Operation *op: ops)
         op->apply();
@@ -135,6 +154,7 @@ void Group::render() {
     for(Group *chld : children)
         chld->render();
 
+    glFlush();
     glPopMatrix();
 }
 
