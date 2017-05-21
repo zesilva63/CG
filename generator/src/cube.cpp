@@ -106,7 +106,7 @@ Shape* draw_yz(float x, float y, float z, int n) {
 }
 
 Shape* draw_xz(float x, float y, float z, int n) {
-    Shape *r, *tmp;
+    Shape *r = new Shape(), *tmp;
     float ix, fx, jx; //initial x, final x, jump x
     float iz, fz, jz;
 

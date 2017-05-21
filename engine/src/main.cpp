@@ -6,14 +6,14 @@
 #include <IL/il.h>
 
 #include <exception>
-#include "view.h"
+#include "scene.h"
 #include "camera.h"
 #include "../../src/vertex.h"
 
 using std::vector;
 
-View scene;
-View ship;
+Scene s;
+Scene ship;
 Camera c;
 
 void changeSize(int w, int h) {
@@ -49,16 +49,16 @@ void renderscene(void) {
     glTranslatef(0.0f, -0.6f, -3);
 
     ship.render();
-
+    
     glRotatef(180,1.0,0.0,0.0);
     glTranslatef(0.0f, 00.f, 30);
+
 
     glRotatef(c.getXRot(),1.0,0.0,0.0);
     glRotatef(c.getYRot(),0.0,1.0,0.0);
     glTranslated(-c.getXPos(),-c.getYPos(),-c.getZPos());
-
-    scene.render();
-
+    s.render();
+    
     // End of frame
     glutSwapBuffers();
 }
@@ -76,58 +76,58 @@ int main(int argc, char **argv) {
     glutInitWindowPosition(100,100);
     glutInitWindowSize(800,800);
     glutCreateWindow("Engine");
+    glEnableClientState(GL_VERTEX_ARRAY);
     glewInit();
 
-    // required callback registry
-    glutDisplayFunc(renderscene);
-    glutIdleFunc(renderscene);
-    glutReshapeFunc(changeSize);
-
-    // register keyboard callbacks
-    glutKeyboardFunc(keyboard);
-
-    ilInit();
-    ilEnable(IL_ORIGIN_SET);
-    ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
+    if (argc == 1) {
+        std::cerr << "Input file required" << std::endl;
+        return 1;
+    }
+    if (argc == 2){
+        try {
+            s.parse(std::string(argv[1]));
+        } 
+        catch (std::exception& e) {
+            std::cerr << "ERROR: " << e.what() << std::endl;
+            return 2;
+        }        
+    }
+    else{
+        try {
+            s.parse(std::string(argv[1]));
+            ship.parse(std::string(argv[2]));
+        } catch (std::exception& e) {
+            std::cerr << "ERROR: " << e.what() << std::endl;
+            return 2;
+        }
+    }
 
     // OpenGL settings
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glEnable(GL_TEXTURE_2D);
     glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-
+    
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glEnable(GL_NORMALIZE);
 
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
+    glClearColor(0, 0, 0, 0);
+    s.define_lights();
 
-    GLfloat amb[4]  = {0.2, 0.2, 0.2, 1.0};
-    GLfloat diff[4] = {0.8, 0.8, 0.8, 1.0};
-    GLfloat spec[4] = {1.0, 1.0, 1.0, 1.0};
-    
+    ilInit();
+    ilEnable(IL_ORIGIN_SET);
+    ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
 
-    glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, spec);
-    
+    // required callback registry
+    glutDisplayFunc(renderscene);
+    glutIdleFunc (renderscene);
+    glutReshapeFunc(changeSize);
 
-    try {
-        switch(argc) {
-            case 1: std::cerr << "Input file required" << std::endl;
-                    return 1;
-            case 2: scene.parse(std::string(argv[1]));
-                    break;
-            default: scene.parse(std::string(argv[1]));
-                     ship.parse(std::string(argv[2]));
-        }
-    } catch (std::exception& e) {
-        std::cerr << "ERROR: " << e.what() << std::endl;
-        return 2;
-    }
-    scene.render_lights();
+    // register keyboard callbacks
+    glutKeyboardFunc(keyboard);
 
     // enter GLUT's main cycle
     glutMainLoop();

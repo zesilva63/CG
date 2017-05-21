@@ -4,30 +4,25 @@
 using tinyxml2::XMLElement;
 
 Rotate::Rotate() {
-    time = -1;
-    angle = 0;
+    time = 0;
     axisX = 0;
     axisY = 0;
     axisZ = 0;
 }
 
-void Rotate::parse(XMLElement *rt) {
+int Rotate::parse(XMLElement *rt) {
     rt->QueryFloatAttribute("time", &time);
-    rt->QueryFloatAttribute("angle", &angle);
     rt->QueryFloatAttribute("axisX", &axisX);
     rt->QueryFloatAttribute("axisY", &axisY);
     rt->QueryFloatAttribute("axisZ", &axisZ);
+    if (time==0) return 0;
+    return 1;
 }
 
 void Rotate::apply() {
-    float rot_value = angle;
-
-    if (time > 0) {
-        float elapsed = glutGet(GLUT_ELAPSED_TIME) % (int)(time * 1000);
-        rot_value = (elapsed * 360) / (time * 1000);
-    }
-
-    glRotatef(rot_value, axisX, axisY, axisZ);
+    float r = glutGet(GLUT_ELAPSED_TIME) % (int)(time * 1000);
+    float gr = (r * 360) / (time * 1000);
+    glRotatef(gr, axisX, axisY, axisZ);
 }
 
 const char* Rotate::type() {
