@@ -149,10 +149,17 @@ void Model::parse(XMLElement* model) {
 }
 
 
-
+void Model::render_material() {
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shininess);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission);
+}
 
 void Model::render() {
     glBindTexture(GL_TEXTURE_2D, texID);
+    render_material();
     
     glBindBuffer(GL_ARRAY_BUFFER, vertex[0]);
     glVertexPointer(3, GL_FLOAT,0,0);

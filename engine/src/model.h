@@ -23,6 +23,7 @@ class Model {
         void loadTexture(std::string s);
         void parse_material(tinyxml2::XMLElement* model);
         void parse_texture(std::string directory, tinyxml2::XMLElement* model);
+        void render_material();
         double n;
         int vertexI = 0;
         int normalI = 0;
@@ -38,6 +39,7 @@ class Model {
         float shininess;
         GLenum light_type;
 };
+
 
 class Group {
     public:
