@@ -99,6 +99,7 @@ int main(int argc, char **argv) {
     glEnable(GL_LIGHT0);
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
+glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE); 
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 

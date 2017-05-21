@@ -37,6 +37,8 @@ void View::parse(string filename) {
         if (!strcmp(node->Value(), "group")) {
             Group *grp = parse_group(node);
             groups.push_back(grp);
+        } else if (!strcmp(node->Value(), "lights")) {
+            parse_lights(node);
         }
     }
 }
@@ -91,7 +93,7 @@ void View::parse_models(Group* grp, XMLNode *nd) {
 void View::parse_model(Group* grp, XMLNode *nd) {
     Model *model = new Model();
 
-    model->parse(dirname, nd->ToElement());
+    model->parse(nd->ToElement());
     grp->add_model(model);
 }
 

@@ -11,11 +11,13 @@
 
 class Model {
     public:
-        Model();
-        void parse(std::string directory, tinyxml2::XMLElement *model);
+        void parse(tinyxml2::XMLElement *model);
         void render();
 
     private:
+        void parse_line(std::string line);
+    float *vertexData, *normalData, *textureData;
+        int vertexI, normalI, textureI;
         int vertices, normals, tex_points;
         GLuint texture, buffers[3];
         float ambient[4] = {0.2, 0.2, 0.2, 1};

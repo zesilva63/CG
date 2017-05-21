@@ -13,14 +13,6 @@ using tinyxml2::XMLElement;
 
 using std::vector;
 
-Model::Model() {
-    vertices = 0;
-    normals = 0;
-    texture = 0;
-    tex_points = 0;
-    shininess = 0;
-}
-
 void Model::parse_material(XMLElement* model) {
     model->QueryFloatAttribute("diffR", &diffuse[0]);
     model->QueryFloatAttribute("diffG", &diffuse[1]);
@@ -48,31 +40,73 @@ void Model::render_material() {
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
     glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission);
 }
+void Model::parse(XMLElement* model) {
+    string line;
+    const char* filename = model->Attribute("file");
+    ifstream ifile( string("example/") + filename);
+    int n=0;
 
-void Model::parse(string directory, XMLElement* model) {
-    string line, filename = string(model->Attribute("file"));
-    vector<float> *vec;
-    Shape s;
-
-    parse_texture(directory, model);
+    parse_texture("example/", model);
     parse_material(model);
-    s.load_file(directory + filename);
-    glGenBuffers(3, buffers);
 
+    if (ifile.fail())
+        throw std::ios_base::failure(string("Couldn't find file: ") + filename);
+
+    while(getline(ifile,line)) n++;
+
+
+
+    n= n/3;
+
+    ifile.clear();
+    ifile.seekg(0, std::ios::beg);
+
+    glGenBuffers(3, buffers);
+    vertexData = (float*) malloc((n+1)*3*sizeof(float));
+    normalData = (float*) malloc((n+1)*3*sizeof(float));
+    textureData = (float*) malloc((n+1)*3*sizeof(float));
+
+
+    while(getline(ifile, line)) {
+        try {
+            parse_line(line);
+        } catch (exception& e) {
+            throw std::invalid_argument(
+              std::string("Couldn't parse file ") + filename + ": " + e.what());
+        }
+    }
     glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-    vec = s.get_vertices();
-    vertices = vec->size();
-    glBufferData(GL_ARRAY_BUFFER, vertices*sizeof(float), vec->data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,vertexI*sizeof(float),vertexData,GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-    vec = s.get_normals();
-    normals = vec->size();
-    glBufferData(GL_ARRAY_BUFFER, normals*sizeof(float), vec->data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,normalI*sizeof(float),normalData,GL_STATIC_DRAW);
 
-    glBindTexture(GL_ARRAY_BUFFER, buffers[2]);
-    vec = s.get_texture();
-    tex_points = vec->size();
-    glBufferData(GL_ARRAY_BUFFER, tex_points*sizeof(float), vec->data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+    glBufferData(GL_ARRAY_BUFFER,textureI*sizeof(float),textureData,GL_STATIC_DRAW);
+
+}
+
+void Model::parse_line(string line){
+    if(line[0]=='V'){
+        line.erase(0,2);
+        Vertex *v = new Vertex(line);
+        vertexData[vertexI++]=v->getX();
+        vertexData[vertexI++]=v->getY();
+        vertexData[vertexI++]=v->getZ();
+    }
+    if(line[0]=='N'){
+        line.erase(0,2);
+        Vertex *v = new Vertex(line);
+        normalData[normalI++]=v->getX();
+        normalData[normalI++]=v->getY();
+        normalData[normalI++]=v->getZ();
+    }
+    if(line[0]=='T'){
+        line.erase(0,2);
+        Vertex *v = new Vertex(line);
+        textureData[textureI++]=v->getX();
+        textureData[textureI++]=v->getY();
+    }
 }
 
 void Model::parse_texture(string directory, XMLElement* model) {
@@ -99,11 +133,13 @@ void Model::load_texture(const char* tex_file) {
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,  GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,  GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTexParameteri(GL_TEXTURE_2D,  GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
+    glGenerateMipmap(GL_TEXTURE_2D);
 }
 
 void Model::render() {
@@ -119,7 +155,7 @@ void Model::render() {
     glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
     glTexCoordPointer(2, GL_FLOAT, 0, 0);
 
-    glDrawArrays(GL_TRIANGLES, 0, vertices / 3);
+    glDrawArrays(GL_TRIANGLES, 0, vertexI / 3);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
